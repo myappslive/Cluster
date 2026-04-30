@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-:root {
+:root, [data-theme="dark"] {
   --bg: #0e0e10;
   --bg-card: #16161a;
   --bg-card-2: #1c1c22;
@@ -29,7 +29,59 @@
   --p1: #f0b86e;
   --p2: #7aa7d9;
   --p3: #888;
+  --modal-overlay: rgba(0,0,0,0.7);
+  --p0-bg: rgba(229, 115, 115, 0.15);
+  --p1-bg: rgba(240, 184, 110, 0.15);
+  --p2-bg: rgba(122, 167, 217, 0.15);
+  --p3-bg: rgba(136, 136, 136, 0.15);
+  --accent-bg: rgba(212, 165, 116, 0.15);
+  --success-bg: rgba(109, 191, 138, 0.15);
+  --danger-bg: rgba(229, 115, 115, 0.15);
+  --warn-bg: rgba(240, 184, 110, 0.15);
+  --info-bg: rgba(122, 167, 217, 0.15);
+  --chart-grid: #22222a;
+  --chart-bg-trans-accent: rgba(212, 165, 116, 0.08);
+  --chart-bg-trans-success: rgba(109, 191, 138, 0.1);
+  --chart-bg-trans-danger: rgba(229, 115, 115, 0.1);
 }
+
+[data-theme="light"] {
+  --bg: #faf7f2;
+  --bg-card: #ffffff;
+  --bg-card-2: #f5f1ea;
+  --bg-elevated: #f0ebe2;
+  --border: #e4ddd0;
+  --border-strong: #cfc5b3;
+  --text: #2a2622;
+  --text-dim: #6b6359;
+  --text-faint: #9a9285;
+  --accent: #a06a3a;
+  --accent-dim: #b88a5a;
+  --danger: #b54545;
+  --warn: #b8782a;
+  --success: #3f8a5a;
+  --info: #3d6da5;
+  --p0: #b54545;
+  --p1: #b8782a;
+  --p2: #3d6da5;
+  --p3: #6b6359;
+  --modal-overlay: rgba(40, 30, 20, 0.5);
+  --p0-bg: rgba(181, 69, 69, 0.12);
+  --p1-bg: rgba(184, 120, 42, 0.14);
+  --p2-bg: rgba(61, 109, 165, 0.12);
+  --p3-bg: rgba(107, 99, 89, 0.12);
+  --accent-bg: rgba(160, 106, 58, 0.12);
+  --success-bg: rgba(63, 138, 90, 0.12);
+  --danger-bg: rgba(181, 69, 69, 0.12);
+  --warn-bg: rgba(184, 120, 42, 0.14);
+  --info-bg: rgba(61, 109, 165, 0.12);
+  --chart-grid: #ece5d6;
+  --chart-bg-trans-accent: rgba(160, 106, 58, 0.1);
+  --chart-bg-trans-success: rgba(63, 138, 90, 0.1);
+  --chart-bg-trans-danger: rgba(181, 69, 69, 0.1);
+}
+
+html { background: var(--bg); }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -40,6 +92,11 @@ body {
   line-height: 1.6;
   font-size: 14px;
   min-height: 100vh;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.metric, .chart-card, .checklist-section, .data-table-wrap, .col, .cal-card, .modal, .intro, .diag-card, .note, .tab, .data-tab, .btn, .team-pill, .user-bar input, .user-bar button, .search-bar {
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
 
 .app {
@@ -111,6 +168,25 @@ header {
 .user-bar button:hover {
   border-color: var(--accent-dim);
   color: var(--accent);
+}
+
+.theme-btn {
+  width: 32px;
+  height: 30px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+}
+
+.theme-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .tabs {
@@ -498,10 +574,10 @@ header {
   letter-spacing: 0.04em;
 }
 
-.p-p0 { background: rgba(229, 115, 115, 0.15); color: var(--p0); }
-.p-p1 { background: rgba(240, 184, 110, 0.15); color: var(--p1); }
-.p-p2 { background: rgba(122, 167, 217, 0.15); color: var(--p2); }
-.p-p3 { background: rgba(136, 136, 136, 0.15); color: var(--p3); }
+.p-p0 { background: var(--p0-bg); color: var(--p0); }
+.p-p1 { background: var(--p1-bg); color: var(--p1); }
+.p-p2 { background: var(--p2-bg); color: var(--p2); }
+.p-p3 { background: var(--p3-bg); color: var(--p3); }
 
 .controls {
   display: flex;
@@ -643,23 +719,23 @@ header {
   font-size: 9px;
   padding: 2px 6px;
   border-radius: 3px;
-  background: rgba(212, 165, 116, 0.15);
+  background: var(--accent-bg);
   color: var(--accent);
   font-family: 'JetBrains Mono', monospace;
   margin-right: 4px;
 }
 
-.cluster-tag.rescue { background: rgba(229, 115, 115, 0.15); color: var(--danger); }
-.cluster-tag.bestfor { background: rgba(122, 167, 217, 0.15); color: var(--info); }
-.cluster-tag.alt { background: rgba(240, 184, 110, 0.15); color: var(--warn); }
-.cluster-tag.industry { background: rgba(109, 191, 138, 0.15); color: var(--success); }
-.cluster-tag.commercial { background: rgba(212, 165, 116, 0.15); color: var(--accent); }
+.cluster-tag.rescue { background: var(--danger-bg); color: var(--danger); }
+.cluster-tag.bestfor { background: var(--info-bg); color: var(--info); }
+.cluster-tag.alt { background: var(--warn-bg); color: var(--warn); }
+.cluster-tag.industry { background: var(--success-bg); color: var(--success); }
+.cluster-tag.commercial { background: var(--accent-bg); color: var(--accent); }
 
 .modal-overlay {
   display: none;
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.7);
+  background: var(--modal-overlay);
   z-index: 100;
   align-items: center;
   justify-content: center;
@@ -810,11 +886,11 @@ header {
   margin-right: 4px;
 }
 
-.tag-status-idea { background: rgba(136, 136, 136, 0.15); color: var(--text-dim); }
-.tag-status-outlined { background: rgba(122, 167, 217, 0.15); color: var(--info); }
-.tag-status-drafting { background: rgba(240, 184, 110, 0.15); color: var(--warn); }
-.tag-status-review { background: rgba(212, 165, 116, 0.15); color: var(--accent); }
-.tag-status-published { background: rgba(109, 191, 138, 0.15); color: var(--success); }
+.tag-status-idea { background: var(--p3-bg); color: var(--text-dim); }
+.tag-status-outlined { background: var(--info-bg); color: var(--info); }
+.tag-status-drafting { background: var(--warn-bg); color: var(--warn); }
+.tag-status-review { background: var(--accent-bg); color: var(--accent); }
+.tag-status-published { background: var(--success-bg); color: var(--success); }
 
 .intro {
   background: var(--bg-card);
@@ -850,6 +926,7 @@ footer {
     <p class="sub">odoo.adatasol.com · 30-day execution dashboard · Data window: Jan 22 - Apr 17, 2026</p>
   </div>
   <div class="user-bar">
+    <button id="themeBtn" title="Toggle theme" class="theme-btn"><span id="themeIcon"></span></button>
     <span>You:</span>
     <input type="text" id="userName" placeholder="Your name" maxlength="20">
     <button id="exportBtn" title="Download progress as JSON">Export</button>
@@ -1910,32 +1987,63 @@ document.querySelectorAll('#countryTable').forEach(t => {
   }).join('');
 });
 
-const chartDefaults = {
-  color: '#a0a0a8',
-  borderColor: '#2a2a32',
-  gridColor: '#22222a'
-};
+function getCssVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
 
-Chart.defaults.color = chartDefaults.color;
-Chart.defaults.borderColor = chartDefaults.borderColor;
-Chart.defaults.font.family = 'Inter, sans-serif';
-Chart.defaults.font.size = 11;
+function getChartColors() {
+  return {
+    color: getCssVar('--text-dim'),
+    borderColor: getCssVar('--border'),
+    gridColor: getCssVar('--chart-grid'),
+    accent: getCssVar('--accent'),
+    danger: getCssVar('--danger'),
+    success: getCssVar('--success'),
+    warn: getCssVar('--warn'),
+    info: getCssVar('--info'),
+    textFaint: getCssVar('--text-faint'),
+    bg: getCssVar('--bg'),
+    accentBgTrans: getCssVar('--chart-bg-trans-accent'),
+    successBgTrans: getCssVar('--chart-bg-trans-success'),
+    dangerBgTrans: getCssVar('--chart-bg-trans-danger')
+  };
+}
 
+let chartDefaults = getChartColors();
+
+function applyChartGlobals() {
+  chartDefaults = getChartColors();
+  Chart.defaults.color = chartDefaults.color;
+  Chart.defaults.borderColor = chartDefaults.borderColor;
+  Chart.defaults.font.family = 'Inter, sans-serif';
+  Chart.defaults.font.size = 11;
+}
+
+applyChartGlobals();
+
+let chartInstances = {};
 let chartsInit = { performance: false, audience: false, indexing: false };
+
+function destroyAllCharts() {
+  Object.values(chartInstances).forEach(c => { try { c.destroy(); } catch (e) {} });
+  chartInstances = {};
+  chartsInit = { performance: false, audience: false, indexing: false };
+}
 
 function initPerformanceCharts() {
   if (chartsInit.performance) return;
   chartsInit.performance = true;
+  const cd = chartDefaults;
 
-  new Chart(document.getElementById('trendChart'), {
+  chartInstances.trendChart = new Chart(document.getElementById('trendChart'), {
     type: 'line',
     data: {
       labels: trendDataRaw.map(d => d.d.slice(5)),
       datasets: [{
         label: 'Daily impressions',
         data: trendDataRaw.map(d => d.i),
-        borderColor: '#d4a574',
-        backgroundColor: 'rgba(212, 165, 116, 0.08)',
+        borderColor: cd.accent,
+        backgroundColor: cd.accentBgTrans,
         fill: true,
         tension: 0.3,
         pointRadius: 0,
@@ -1948,25 +2056,25 @@ function initPerformanceCharts() {
       maintainAspectRatio: false,
       plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
       scales: {
-        x: { grid: { color: chartDefaults.gridColor }, ticks: { maxTicksLimit: 12 } },
-        y: { grid: { color: chartDefaults.gridColor }, beginAtZero: true }
+        x: { grid: { color: cd.gridColor }, ticks: { maxTicksLimit: 12 } },
+        y: { grid: { color: cd.gridColor }, beginAtZero: true }
       }
     }
   });
 
-  new Chart(document.getElementById('indexChart'), {
+  chartInstances.indexChart = new Chart(document.getElementById('indexChart'), {
     type: 'line',
     data: {
       labels: indexTrendRaw.map(d => d.d.slice(5)),
       datasets: [
-        { label: 'Indexed', data: indexTrendRaw.map(d => d.i), borderColor: '#6dbf8a', backgroundColor: 'rgba(109, 191, 138, 0.1)', borderWidth: 2, tension: 0.3, pointRadius: 3, fill: false },
-        { label: 'Not indexed', data: indexTrendRaw.map(d => d.ni), borderColor: '#e57373', backgroundColor: 'rgba(229, 115, 115, 0.1)', borderWidth: 2, tension: 0.3, pointRadius: 3, fill: false }
+        { label: 'Indexed', data: indexTrendRaw.map(d => d.i), borderColor: cd.success, backgroundColor: cd.successBgTrans, borderWidth: 2, tension: 0.3, pointRadius: 3, fill: false },
+        { label: 'Not indexed', data: indexTrendRaw.map(d => d.ni), borderColor: cd.danger, backgroundColor: cd.dangerBgTrans, borderWidth: 2, tension: 0.3, pointRadius: 3, fill: false }
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 10, boxHeight: 10, padding: 14, font: { size: 11 } } } },
-      scales: { x: { grid: { color: chartDefaults.gridColor } }, y: { grid: { color: chartDefaults.gridColor }, beginAtZero: true } }
+      scales: { x: { grid: { color: cd.gridColor } }, y: { grid: { color: cd.gridColor }, beginAtZero: true } }
     }
   });
 
@@ -1979,48 +2087,48 @@ function initPerformanceCharts() {
     else if (q.p <= 70) buckets['Pos 51-70']++;
     else buckets['Pos 71+']++;
   });
-  new Chart(document.getElementById('posDistChart'), {
+  chartInstances.posDistChart = new Chart(document.getElementById('posDistChart'), {
     type: 'bar',
     data: {
       labels: Object.keys(buckets),
       datasets: [{
         data: Object.values(buckets),
-        backgroundColor: ['#6dbf8a', '#a3c47e', '#f0b86e', '#e89060', '#e57373', '#7a4a4a'],
+        backgroundColor: [cd.success, '#a3c47e', cd.warn, '#e89060', cd.danger, '#7a4a4a'],
         borderWidth: 0
       }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.parsed.y + ' queries' } } },
-      scales: { x: { grid: { display: false } }, y: { grid: { color: chartDefaults.gridColor }, beginAtZero: true, ticks: { precision: 0 } } }
+      scales: { x: { grid: { display: false } }, y: { grid: { color: cd.gridColor }, beginAtZero: true, ticks: { precision: 0 } } }
     }
   });
 
-  new Chart(document.getElementById('deviceChart'), {
+  chartInstances.deviceChart = new Chart(document.getElementById('deviceChart'), {
     type: 'bar',
     data: {
       labels: ['Desktop', 'Mobile', 'Tablet'],
       datasets: [
-        { label: 'Impressions', data: [8355, 469, 4], backgroundColor: '#7aa7d9', borderWidth: 0 },
-        { label: 'Clicks (×100)', data: [400, 0, 0], backgroundColor: '#d4a574', borderWidth: 0 }
+        { label: 'Impressions', data: [8355, 469, 4], backgroundColor: cd.info, borderWidth: 0 },
+        { label: 'Clicks (×100)', data: [400, 0, 0], backgroundColor: cd.accent, borderWidth: 0 }
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 10, padding: 12 } } },
-      scales: { x: { grid: { display: false } }, y: { grid: { color: chartDefaults.gridColor } } }
+      scales: { x: { grid: { display: false } }, y: { grid: { color: cd.gridColor } } }
     }
   });
 
   const top8 = countriesDataRaw.slice(0, 8);
-  new Chart(document.getElementById('countryChart'), {
+  chartInstances.countryChart = new Chart(document.getElementById('countryChart'), {
     type: 'doughnut',
     data: {
       labels: top8.map(c => c.c),
       datasets: [{
         data: top8.map(c => c.i),
-        backgroundColor: ['#d4a574', '#7aa7d9', '#6dbf8a', '#f0b86e', '#e57373', '#a888c4', '#5d9ec5', '#888'],
-        borderWidth: 1, borderColor: '#0e0e10'
+        backgroundColor: [cd.accent, cd.info, cd.success, cd.warn, cd.danger, '#a888c4', '#5d9ec5', cd.textFaint],
+        borderWidth: 1, borderColor: cd.bg
       }]
     },
     options: {
@@ -2033,24 +2141,25 @@ function initPerformanceCharts() {
 function initAudienceCharts() {
   if (chartsInit.audience) return;
   chartsInit.audience = true;
+  const cd = chartDefaults;
   const top15 = countriesDataRaw.slice(0, 15);
-  new Chart(document.getElementById('countryBarChart'), {
+  chartInstances.countryBarChart = new Chart(document.getElementById('countryBarChart'), {
     type: 'bar',
     data: {
       labels: top15.map(c => c.c),
-      datasets: [{ data: top15.map(c => c.i), backgroundColor: top15.map(c => c.c === 'United States' ? '#d4a574' : '#7aa7d9'), borderWidth: 0 }]
+      datasets: [{ data: top15.map(c => c.i), backgroundColor: top15.map(c => c.c === 'United States' ? cd.accent : cd.info), borderWidth: 0 }]
     },
     options: {
       responsive: true, maintainAspectRatio: false, indexAxis: 'y',
       plugins: { legend: { display: false } },
-      scales: { x: { grid: { color: chartDefaults.gridColor }, beginAtZero: true }, y: { grid: { display: false } } }
+      scales: { x: { grid: { color: cd.gridColor }, beginAtZero: true }, y: { grid: { display: false } } }
     }
   });
   const usImp = 5550;
   const rowImp = countriesDataRaw.slice(1).reduce((s, c) => s + c.i, 0);
-  new Chart(document.getElementById('usRowChart'), {
+  chartInstances.usRowChart = new Chart(document.getElementById('usRowChart'), {
     type: 'doughnut',
-    data: { labels: ['United States (target)', 'Rest of world'], datasets: [{ data: [usImp, rowImp], backgroundColor: ['#d4a574', '#888'], borderWidth: 1, borderColor: '#0e0e10' }] },
+    data: { labels: ['United States (target)', 'Rest of world'], datasets: [{ data: [usImp, rowImp], backgroundColor: [cd.accent, cd.textFaint], borderWidth: 1, borderColor: cd.bg }] },
     options: { responsive: true, maintainAspectRatio: false, cutout: '60%', plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 10, boxHeight: 10, padding: 12 } } } }
   });
 }
@@ -2058,22 +2167,34 @@ function initAudienceCharts() {
 function initIndexingCharts() {
   if (chartsInit.indexing) return;
   chartsInit.indexing = true;
-  new Chart(document.getElementById('issueChart'), {
+  const cd = chartDefaults;
+  chartInstances.issueChart = new Chart(document.getElementById('issueChart'), {
     type: 'bar',
     data: {
       labels: issuesData.map(x => x.r),
-      datasets: [{ data: issuesData.map(x => x.n), backgroundColor: issuesData.map(x => x.v === 'Failed' ? '#e57373' : x.v === 'Not Started' ? '#888' : x.v === 'Started' ? '#f0b86e' : '#6dbf8a'), borderWidth: 0 }]
+      datasets: [{ data: issuesData.map(x => x.n), backgroundColor: issuesData.map(x => x.v === 'Failed' ? cd.danger : x.v === 'Not Started' ? cd.textFaint : x.v === 'Started' ? cd.warn : cd.success), borderWidth: 0 }]
     },
-    options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { grid: { color: chartDefaults.gridColor }, beginAtZero: true }, y: { grid: { display: false } } } }
+    options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { grid: { color: cd.gridColor }, beginAtZero: true }, y: { grid: { display: false } } } }
   });
 
   const valGroup = {};
   issuesData.forEach(x => { valGroup[x.v] = (valGroup[x.v] || 0) + x.n; });
-  new Chart(document.getElementById('validationChart'), {
+  chartInstances.validationChart = new Chart(document.getElementById('validationChart'), {
     type: 'doughnut',
-    data: { labels: Object.keys(valGroup), datasets: [{ data: Object.values(valGroup), backgroundColor: ['#6dbf8a', '#e57373', '#888', '#f0b86e'], borderWidth: 1, borderColor: '#0e0e10' }] },
+    data: { labels: Object.keys(valGroup), datasets: [{ data: Object.values(valGroup), backgroundColor: [cd.success, cd.danger, cd.textFaint, cd.warn], borderWidth: 1, borderColor: cd.bg }] },
     options: { responsive: true, maintainAspectRatio: false, cutout: '55%', plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 10, boxHeight: 10, padding: 12 } } } }
   });
+}
+
+function rebuildVisibleCharts() {
+  applyChartGlobals();
+  destroyAllCharts();
+  const activeTab = document.querySelector('.tab.active');
+  if (!activeTab) return;
+  const t = activeTab.dataset.tab;
+  if (t === 'performance') initPerformanceCharts();
+  if (t === 'audience') initAudienceCharts();
+  if (t === 'indexing') initIndexingCharts();
 }
 
 function renderCalendar() {
@@ -2248,6 +2369,26 @@ document.getElementById('importFile').addEventListener('change', e => {
   };
   reader.readAsText(f);
   e.target.value = '';
+});
+
+const SUN_ICON = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>';
+const MOON_ICON = '<svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  state.theme = theme;
+  saveState();
+  const icon = document.getElementById('themeIcon');
+  if (icon) icon.innerHTML = theme === 'dark' ? SUN_ICON : MOON_ICON;
+  if (typeof rebuildVisibleCharts === 'function') rebuildVisibleCharts();
+}
+
+const initialTheme = state.theme || 'dark';
+applyTheme(initialTheme);
+
+document.getElementById('themeBtn').addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
 });
 
 renderFixes();

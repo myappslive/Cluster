@@ -1,1 +1,2261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adatasol SEO Recovery Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #0e0e10;
+  --bg-card: #16161a;
+  --bg-card-2: #1c1c22;
+  --bg-elevated: #22222a;
+  --border: #2a2a32;
+  --border-strong: #3a3a44;
+  --text: #e8e8ea;
+  --text-dim: #a0a0a8;
+  --text-faint: #6a6a72;
+  --accent: #d4a574;
+  --accent-dim: #8a6a4a;
+  --danger: #e57373;
+  --warn: #f0b86e;
+  --success: #6dbf8a;
+  --info: #7aa7d9;
+  --p0: #e57373;
+  --p1: #f0b86e;
+  --p2: #7aa7d9;
+  --p3: #888;
+}
 
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 14px;
+  min-height: 100vh;
+}
+
+.app {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.brand h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.brand .sub {
+  color: var(--text-dim);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.user-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.user-bar input {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 12px;
+  width: 130px;
+}
+
+.user-bar input:focus {
+  outline: none;
+  border-color: var(--accent-dim);
+}
+
+.user-bar button {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.user-bar button:hover {
+  border-color: var(--accent-dim);
+  color: var(--accent);
+}
+
+.tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  overflow-x: auto;
+}
+
+.tab {
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+
+.tab:hover { color: var(--text); }
+
+.tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.panel { display: none; }
+.panel.active { display: block; animation: fadeIn 0.2s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-h {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  margin: 32px 0 16px;
+  color: var(--text);
+}
+
+.section-h:first-child { margin-top: 0; }
+
+.section-h .sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: var(--text-dim);
+  font-weight: 400;
+  display: block;
+  margin-top: 4px;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.metric {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+
+.metric.danger { border-left: 3px solid var(--danger); }
+.metric.warn { border-left: 3px solid var(--warn); }
+.metric.success { border-left: 3px solid var(--success); }
+
+.metric-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.metric-value {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 1;
+  color: var(--text);
+}
+
+.metric-sub {
+  font-size: 11px;
+  color: var(--text-faint);
+  margin-top: 6px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+
+.chart-card h3 {
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.chart-card .desc {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+}
+
+.chart-wrap {
+  position: relative;
+  height: 240px;
+}
+
+.chart-wrap.tall { height: 320px; }
+
+.diag-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.diag-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--danger);
+  border-radius: 8px;
+  padding: 16px 18px;
+}
+
+.diag-card.warn { border-left-color: var(--warn); }
+.diag-card.info { border-left-color: var(--info); }
+
+.diag-card h4 {
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.diag-card p {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+.data-controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.data-tab {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  transition: all 0.15s;
+}
+
+.data-tab:hover { color: var(--text); }
+.data-tab.active {
+  background: var(--bg-elevated);
+  color: var(--accent);
+  border-color: var(--accent-dim);
+}
+
+.search-bar {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 12px;
+  width: 240px;
+}
+
+.search-bar:focus {
+  outline: none;
+  border-color: var(--accent-dim);
+}
+
+.data-table-wrap {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.data-table thead {
+  background: var(--bg-elevated);
+}
+
+.data-table th {
+  text-align: left;
+  padding: 10px 14px;
+  font-weight: 500;
+  color: var(--text-dim);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.data-table th:hover { color: var(--accent); }
+.data-table th.sorted { color: var(--accent); }
+.data-table th .arrow { font-size: 9px; margin-left: 4px; opacity: 0.6; }
+
+.data-table td {
+  padding: 8px 14px;
+  border-top: 1px solid var(--border);
+  color: var(--text);
+}
+
+.data-table tr:hover td { background: var(--bg-elevated); }
+
+.data-table td.num {
+  font-family: 'JetBrains Mono', monospace;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.data-table td.url {
+  max-width: 380px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.pos-bad { color: var(--danger); }
+.pos-mid { color: var(--warn); }
+.pos-good { color: var(--success); }
+
+.checklist-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.section-header {
+  padding: 14px 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-elevated);
+  user-select: none;
+}
+
+.section-header:hover { background: var(--bg-card-2); }
+
+.section-title {
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-title .caret {
+  font-size: 10px;
+  color: var(--text-dim);
+  transition: transform 0.15s;
+}
+
+.section-header.open .caret {
+  transform: rotate(90deg);
+}
+
+.section-progress {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.progress-mini {
+  width: 60px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-mini-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.3s;
+}
+
+.section-body {
+  padding: 4px 18px 14px;
+  display: none;
+}
+
+.section-body.open { display: block; }
+
+.task {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.task:last-child { border-bottom: none; }
+
+.task input[type="checkbox"] {
+  margin-top: 3px;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: var(--accent);
+  width: 14px;
+  height: 14px;
+}
+
+.task label {
+  flex: 1;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.task.done label {
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+
+.task .done-by {
+  font-size: 10px;
+  color: var(--text-faint);
+  font-family: 'JetBrains Mono', monospace;
+  margin-top: 2px;
+  display: block;
+}
+
+.priority {
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  flex-shrink: 0;
+  letter-spacing: 0.04em;
+}
+
+.p-p0 { background: rgba(229, 115, 115, 0.15); color: var(--p0); }
+.p-p1 { background: rgba(240, 184, 110, 0.15); color: var(--p1); }
+.p-p2 { background: rgba(122, 167, 217, 0.15); color: var(--p2); }
+.p-p3 { background: rgba(136, 136, 136, 0.15); color: var(--p3); }
+
+.controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn:hover {
+  border-color: var(--accent-dim);
+  color: var(--accent);
+}
+
+.btn-danger:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.btn-primary {
+  background: var(--accent-dim);
+  color: var(--bg);
+  border-color: var(--accent-dim);
+}
+
+.btn-primary:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 1100px) {
+  .calendar-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .calendar-grid { grid-template-columns: 1fr; }
+}
+
+.col {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  min-height: 200px;
+}
+
+.col-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.col-title {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+
+.col-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  background: var(--bg-elevated);
+  padding: 2px 8px;
+  border-radius: 10px;
+  color: var(--text-dim);
+}
+
+.cal-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.cal-card:hover {
+  border-color: var(--accent-dim);
+}
+
+.cal-card .type {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+.cal-card .title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.cal-card .meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-faint);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.cal-card .keyword {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.cluster-tag {
+  display: inline-block;
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(212, 165, 116, 0.15);
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  margin-right: 4px;
+}
+
+.cluster-tag.rescue { background: rgba(229, 115, 115, 0.15); color: var(--danger); }
+.cluster-tag.bestfor { background: rgba(122, 167, 217, 0.15); color: var(--info); }
+.cluster-tag.alt { background: rgba(240, 184, 110, 0.15); color: var(--warn); }
+.cluster-tag.industry { background: rgba(109, 191, 138, 0.15); color: var(--success); }
+.cluster-tag.commercial { background: rgba(212, 165, 116, 0.15); color: var(--accent); }
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal h3 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.modal label {
+  display: block;
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 14px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.modal input, .modal select, .modal textarea {
+  width: 100%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.modal textarea { min-height: 80px; resize: vertical; font-family: inherit; }
+.modal input:focus, .modal select:focus, .modal textarea:focus {
+  outline: none;
+  border-color: var(--accent-dim);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--bg-elevated);
+  color: var(--text);
+  padding: 12px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 13px;
+  z-index: 200;
+  display: none;
+  animation: slideIn 0.2s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.toast.success { border-left: 3px solid var(--success); }
+.toast.danger { border-left: 3px solid var(--danger); }
+
+.note {
+  font-size: 12px;
+  color: var(--text-faint);
+  font-style: italic;
+  padding: 12px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  margin-top: 16px;
+}
+
+.legend-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+
+.legend-row span { display: inline-flex; align-items: center; gap: 6px; }
+.legend-row i {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.section-divider {
+  border-top: 1px solid var(--border);
+  margin: 32px 0 24px;
+}
+
+.team-list {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.team-pill {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.team-pill.active {
+  background: var(--accent-dim);
+  color: var(--bg);
+  border-color: var(--accent-dim);
+}
+
+.tag {
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  margin-right: 4px;
+}
+
+.tag-status-idea { background: rgba(136, 136, 136, 0.15); color: var(--text-dim); }
+.tag-status-outlined { background: rgba(122, 167, 217, 0.15); color: var(--info); }
+.tag-status-drafting { background: rgba(240, 184, 110, 0.15); color: var(--warn); }
+.tag-status-review { background: rgba(212, 165, 116, 0.15); color: var(--accent); }
+.tag-status-published { background: rgba(109, 191, 138, 0.15); color: var(--success); }
+
+.intro {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+.intro strong { color: var(--text); font-weight: 500; }
+
+footer {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-faint);
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+<header>
+  <div class="brand">
+    <h1>Adatasol SEO Recovery</h1>
+    <p class="sub">odoo.adatasol.com · 30-day execution dashboard · Data window: Jan 22 - Apr 17, 2026</p>
+  </div>
+  <div class="user-bar">
+    <span>You:</span>
+    <input type="text" id="userName" placeholder="Your name" maxlength="20">
+    <button id="exportBtn" title="Download progress as JSON">Export</button>
+    <button id="importBtn" title="Import progress JSON">Import</button>
+    <input type="file" id="importFile" accept=".json" style="display:none">
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab active" data-tab="overview">Overview</button>
+  <button class="tab" data-tab="performance">Performance</button>
+  <button class="tab" data-tab="queries">Queries</button>
+  <button class="tab" data-tab="pages">Pages</button>
+  <button class="tab" data-tab="audience">Audience</button>
+  <button class="tab" data-tab="indexing">Indexing</button>
+  <button class="tab" data-tab="fixes">Fixes checklist</button>
+  <button class="tab" data-tab="plan">30-day plan</button>
+  <button class="tab" data-tab="calendar">Content calendar</button>
+</nav>
+
+<section id="overview" class="panel active">
+  <div class="intro">
+    <strong>Status:</strong> Impressions climbed from 24/day in January to 400-500/day in April. Clicks held at 4 total over 28 days. CTR is 0.05% sitewide. Zero leads in 4 months. The diagnosis is not that SEO is failing, it's that traffic is the wrong kind: AI-Overview fan-out queries with no click-through, and commercial pages stranded on page 4-7 where clicks don't happen.
+  </div>
+
+  <h2 class="section-h">Headline metrics<span class="sub">Last 28 days from GSC</span></h2>
+  <div class="metric-grid">
+    <div class="metric danger"><div class="metric-label">Total clicks</div><div class="metric-value">4</div><div class="metric-sub">across all pages</div></div>
+    <div class="metric"><div class="metric-label">Total impressions</div><div class="metric-value">8,828</div><div class="metric-sub">desktop dominant</div></div>
+    <div class="metric danger"><div class="metric-label">Site CTR</div><div class="metric-value">0.05%</div><div class="metric-sub">target: 1.5%+</div></div>
+    <div class="metric warn"><div class="metric-label">Avg position</div><div class="metric-value">18.7</div><div class="metric-sub">page 2 ceiling</div></div>
+  </div>
+
+  <h2 class="section-h">Indexation health</h2>
+  <div class="metric-grid">
+    <div class="metric success"><div class="metric-label">Indexed pages</div><div class="metric-value">~80</div><div class="metric-sub">of 110+ in sitemap</div></div>
+    <div class="metric danger"><div class="metric-label">404 errors</div><div class="metric-value">27</div><div class="metric-sub">to fix Week 1</div></div>
+    <div class="metric warn"><div class="metric-label">Not indexed</div><div class="metric-value">78</div><div class="metric-sub">66 discovered, 12 crawled</div></div>
+    <div class="metric danger"><div class="metric-label">Mobile clicks</div><div class="metric-value">0</div><div class="metric-sub">on 469 impressions</div></div>
+  </div>
+
+  <h2 class="section-h">Five root causes<span class="sub">What's actually broken</span></h2>
+  <div class="diag-grid">
+    <div class="diag-card"><h4>1. AI Overview cannibalization</h4><p>3 of 4 highest-impression pages are blog posts ranking pos 9-15 with zero clicks. Listicle and comparison content gets summarized by Google AI Overviews. Users get the answer without clicking through. Pattern signature: best-erp-systems-39 has 1,744 impressions at pos 9.7 and zero clicks.</p></div>
+    <div class="diag-card"><h4>2. Commercial pages stranded</h4><p>Every high-intent commercial query (hire odoo developer, odoo consulting services, odoo implementation company) ranks between pos 35 and 76. Page 4-7 generates almost no clicks. This is the lead-gen blocker.</p></div>
+    <div class="diag-card warn"><h4>3. Indexation hygiene broken</h4><p>27 × 404 errors, 78 not indexed, RSS feed inside sitemap, noindex URLs in sitemap, 5 redirects in sitemap, phantom Fleet Management nav item generating 404s.</p></div>
+    <div class="diag-card warn"><h4>4. Mobile non-functional</h4><p>Zero clicks on 469 mobile impressions. Position 30.85 mobile vs 18.07 desktop. Either rendering issue, Core Web Vitals failure, or mobile snippet problem. Mobile-first indexing makes this a sitewide ranking suppressor.</p></div>
+    <div class="diag-card info"><h4>5. Trust signals unused</h4><p>Adatasol is Odoo Ready Partner (entry tier). Competitors are Gold Partners with "500+ projects" claims. Footer says "Odoo Certified Ready Partner" but the badge is not linked to the official partner directory. Free signal sitting unused.</p></div>
+  </div>
+</section>
+
+<section id="performance" class="panel">
+  <h2 class="section-h">Daily impressions trend<span class="sub">86 days, Jan 22 - Apr 17, 2026</span></h2>
+  <div class="chart-card">
+    <div class="chart-wrap tall">
+      <canvas id="trendChart" role="img" aria-label="Daily impressions over 86 days showing growth from 20 to 500 per day"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Indexation status over time</h3>
+      <p class="desc">Indexed pages climbing slowly while not-indexed remains flat at ~115. 78 pages need attention.</p>
+      <div class="chart-wrap">
+        <canvas id="indexChart" role="img" aria-label="Indexed pages versus not-indexed pages over time"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>Position distribution</h3>
+      <p class="desc">Where 342 tracked queries actually rank. Page 4+ is the cliff where clicks disappear.</p>
+      <div class="chart-wrap">
+        <canvas id="posDistChart" role="img" aria-label="Position distribution of tracked queries"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Device split: clicks vs impressions</h3>
+      <p class="desc">Mobile takes 5% of impressions and 0% of clicks. Mobile is killing site-wide performance.</p>
+      <div class="chart-wrap">
+        <canvas id="deviceChart" role="img" aria-label="Device split chart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>Top countries by impressions</h3>
+      <p class="desc">63% of impressions are US (target). 37% from non-target geos (will not convert to leads).</p>
+      <div class="chart-wrap">
+        <canvas id="countryChart" role="img" aria-label="Top countries by impressions"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="queries" class="panel">
+  <h2 class="section-h">Query performance<span class="sub">All 342 tracked queries, sortable</span></h2>
+  <div class="data-controls">
+    <input type="text" class="search-bar" id="querySearch" placeholder="Search queries...">
+    <button class="data-tab" data-qfilter="all">All</button>
+    <button class="data-tab active" data-qfilter="commercial">Commercial intent</button>
+    <button class="data-tab" data-qfilter="hire">Hire/staffing</button>
+    <button class="data-tab" data-qfilter="comparison">Comparisons</button>
+    <button class="data-tab" data-qfilter="ohio">Ohio/local</button>
+    <button class="data-tab" data-qfilter="quickwins">Quick wins (pos 11-20)</button>
+  </div>
+  <div class="legend-row">
+    <span><i style="background: var(--success)"></i>Top 10</span>
+    <span><i style="background: var(--warn)"></i>Page 2-3</span>
+    <span><i style="background: var(--danger)"></i>Page 4+</span>
+  </div>
+  <div class="data-table-wrap">
+    <table class="data-table" id="queryTable">
+      <thead>
+        <tr>
+          <th data-sort="q">Query <span class="arrow"></span></th>
+          <th data-sort="i" class="num sorted">Impr <span class="arrow">▼</span></th>
+          <th data-sort="c" class="num">Clicks <span class="arrow"></span></th>
+          <th data-sort="p" class="num">Pos <span class="arrow"></span></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="pages" class="panel">
+  <h2 class="section-h">Page performance<span class="sub">All 58 indexed pages</span></h2>
+  <div class="data-controls">
+    <input type="text" class="search-bar" id="pageSearch" placeholder="Search pages...">
+    <button class="data-tab active" data-pfilter="all">All</button>
+    <button class="data-tab" data-pfilter="commercial">Commercial</button>
+    <button class="data-tab" data-pfilter="blog">Blog</button>
+    <button class="data-tab" data-pfilter="industry">Industry</button>
+    <button class="data-tab" data-pfilter="case">Case studies</button>
+    <button class="data-tab" data-pfilter="zeroclick">Zero-click but ranking</button>
+  </div>
+  <div class="data-table-wrap">
+    <table class="data-table" id="pageTable">
+      <thead>
+        <tr>
+          <th data-sort="url">Page <span class="arrow"></span></th>
+          <th data-sort="i" class="num sorted">Impr <span class="arrow">▼</span></th>
+          <th data-sort="c" class="num">Clicks <span class="arrow"></span></th>
+          <th data-sort="p" class="num">Pos <span class="arrow"></span></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="audience" class="panel">
+  <h2 class="section-h">Country breakdown<span class="sub">Impressions and rank by geography</span></h2>
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Top 15 countries</h3>
+      <p class="desc">US dominates impressions but rank is poor. Non-US traffic mostly will not convert.</p>
+      <div class="chart-wrap tall">
+        <canvas id="countryBarChart" role="img" aria-label="Top 15 countries by impressions"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>US vs rest of world</h3>
+      <p class="desc">Real serviceable impressions: ~5,500/month, not 8,800.</p>
+      <div class="chart-wrap">
+        <canvas id="usRowChart" role="img" aria-label="US vs Rest of World share"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="data-table-wrap">
+    <table class="data-table" id="countryTable">
+      <thead>
+        <tr><th>Country</th><th class="num">Impr</th><th class="num">Clicks</th><th class="num">CTR</th><th class="num">Pos</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="indexing" class="panel">
+  <h2 class="section-h">Indexing issues<span class="sub">From GSC Coverage report</span></h2>
+  <div class="metric-grid">
+    <div class="metric warn"><div class="metric-label">Discovered, not indexed</div><div class="metric-value">66</div><div class="metric-sub">low quality signal</div></div>
+    <div class="metric danger"><div class="metric-label">404 errors</div><div class="metric-value">27</div><div class="metric-sub">priority cleanup</div></div>
+    <div class="metric danger"><div class="metric-label">Crawled, not indexed</div><div class="metric-value">12</div><div class="metric-sub">rejected by Google</div></div>
+    <div class="metric warn"><div class="metric-label">Page with redirect</div><div class="metric-value">5</div><div class="metric-sub">remove from sitemap</div></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Issue breakdown</h3>
+      <p class="desc">78 pages not indexed total. Half are programmatic location pages with duplicate templating.</p>
+      <div class="chart-wrap tall">
+        <canvas id="issueChart" role="img" aria-label="Indexing issue breakdown"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>Validation status</h3>
+      <p class="desc">Most issues are unaddressed or in early validation.</p>
+      <div class="chart-wrap">
+        <canvas id="validationChart" role="img" aria-label="Validation status of indexing issues"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="data-table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Reason</th><th>Source</th><th>Validation</th><th class="num">Pages</th></tr></thead>
+      <tbody id="issuesBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="fixes" class="panel">
+  <h2 class="section-h">Fixes checklist<span class="sub">Master operating doc, persists across sessions</span></h2>
+  <div class="metric-grid" id="fixesSummary"></div>
+  <div class="controls">
+    <button class="btn" id="expandAllFixes">Expand all</button>
+    <button class="btn" id="collapseAllFixes">Collapse all</button>
+    <span style="flex: 1;"></span>
+    <button class="btn btn-danger" id="resetFixes">Reset progress</button>
+  </div>
+  <div id="fixesList"></div>
+  <div class="note">
+    Progress is per-user (saves to your browser only). To share with the team, click <strong>Export</strong> in the header to download a JSON, share it, and others can <strong>Import</strong>. Use this for weekly status syncs.
+  </div>
+</section>
+
+<section id="plan" class="panel">
+  <h2 class="section-h">30-day execution plan<span class="sub">Five tracks, run in parallel</span></h2>
+  <div class="intro">
+    Tracks are not sequential. Each track has its own owner. Tasks here mirror the Fixes checklist where they overlap. Checking a task in either view updates both. Hour budget: 200-300 across all tracks.
+  </div>
+  <div id="planList"></div>
+</section>
+
+<section id="calendar" class="panel">
+  <h2 class="section-h">Content calendar<span class="sub">Editorial pipeline, kanban-style</span></h2>
+  <div class="controls">
+    <button class="btn btn-primary" id="addContent">+ Add content idea</button>
+    <span style="flex: 1;"></span>
+    <button class="btn" id="expandPipeline">Expand all details</button>
+  </div>
+  <div class="legend-row">
+    <span><i style="background: var(--danger)"></i>Rescue cluster</span>
+    <span><i style="background: var(--info)"></i>Best for X</span>
+    <span><i style="background: var(--warn)"></i>Alternatives</span>
+    <span><i style="background: var(--success)"></i>Industry deep-dive</span>
+    <span><i style="background: var(--accent)"></i>Commercial page</span>
+  </div>
+  <div class="calendar-grid">
+    <div class="col" data-status="idea"><div class="col-header"><div class="col-title">Idea</div><div class="col-count" id="count-idea">0</div></div><div class="col-body" id="col-idea"></div></div>
+    <div class="col" data-status="outlined"><div class="col-header"><div class="col-title">Outlined</div><div class="col-count" id="count-outlined">0</div></div><div class="col-body" id="col-outlined"></div></div>
+    <div class="col" data-status="drafting"><div class="col-header"><div class="col-title">Drafting</div><div class="col-count" id="count-drafting">0</div></div><div class="col-body" id="col-drafting"></div></div>
+    <div class="col" data-status="review"><div class="col-header"><div class="col-title">Review</div><div class="col-count" id="count-review">0</div></div><div class="col-body" id="col-review"></div></div>
+    <div class="col" data-status="published"><div class="col-header"><div class="col-title">Published</div><div class="col-count" id="count-published">0</div></div><div class="col-body" id="col-published"></div></div>
+  </div>
+
+  <div class="section-divider"></div>
+  <h2 class="section-h">Publishing schedule<span class="sub">Recommended cadence Week 1 to Week 4</span></h2>
+  <div id="scheduleList"></div>
+</section>
+
+<footer>
+  Adatasol SEO Recovery Dashboard · Local-first · No data leaves your browser unless you export it
+</footer>
+
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'adatasol_seo_dash_v2';
+let state = { tasks: {}, tasksMeta: {}, content: [], userName: '', cal: null };
+
+try {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) state = Object.assign(state, JSON.parse(saved));
+} catch(e) {}
+
+const userInput = document.getElementById('userName');
+userInput.value = state.userName || '';
+userInput.addEventListener('input', () => {
+  state.userName = userInput.value.trim();
+  saveState();
+});
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) { showToast('Save failed: storage full', 'danger'); }
+}
+
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type || '');
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 2500);
+}
+
+const fixesData = [
+  { id: 'tech-foundation', title: '1. Technical foundation', tasks: [
+    { id: 'sm-1', t: 'Remove /blog/blog-1/feed from sitemap', p: 'P0' },
+    { id: 'sm-2', t: 'Remove utility pages from sitemap (appointment, calendar, helpdesk, terms)', p: 'P0' },
+    { id: 'sm-3', t: 'Remove blog index /blog/blog-1 from sitemap', p: 'P0' },
+    { id: 'sm-4', t: 'Remove all 404, 301, noindex URLs from sitemap', p: 'P0' },
+    { id: 'sm-5', t: 'Add ISO 8601 lastmod dates to every URL', p: 'P0' },
+    { id: 'sm-6', t: 'Resubmit clean sitemap via GSC', p: 'P0' },
+    { id: 'fx-1', t: 'Pull full 27 × 404 list from GSC Coverage', p: 'P0' },
+    { id: 'fx-2', t: 'Build redirect map spreadsheet (old URL → action → target)', p: 'P0' },
+    { id: 'fx-3', t: 'Implement 301 redirects at server level', p: 'P0' },
+    { id: 'fx-4', t: 'Delete phantom Fleet Management menu item in Odoo Website Builder', p: 'P0' },
+    { id: 'fx-5', t: 'Audit blog post internal links for broken numbered slugs', p: 'P1' },
+    { id: 'rb-1', t: 'Rewrite robots.txt: allow Googlebot/Bingbot/AI crawlers', p: 'P1' },
+    { id: 'rb-2', t: 'Disallow /web/login, /web/session, /my/* paths', p: 'P1' },
+    { id: 'rb-3', t: 'Add sitemap directive to robots.txt', p: 'P1' },
+    { id: 'sc-1', t: 'Add sitewide Organization schema with sameAs (Odoo Partner URL)', p: 'P0' },
+    { id: 'sc-2', t: 'Add LocalBusiness schema on homepage and location pages', p: 'P1' },
+    { id: 'sc-3', t: 'Add BreadcrumbList schema sitewide', p: 'P1' },
+    { id: 'sc-4', t: 'Add Service schema on all 8 service pages', p: 'P0' },
+    { id: 'sc-5', t: 'Add FAQPage schema everywhere FAQ exists', p: 'P0' },
+    { id: 'sc-6', t: 'Add Article + Person Author schema on all blog posts', p: 'P1' },
+    { id: 'sc-7', t: 'Validate every schema block via Rich Results Test', p: 'P0' },
+    { id: 'cn-1', t: 'Audit canonical tags sitewide', p: 'P1' },
+    { id: 'mb-1', t: 'Run homepage through Mobile-Friendly Test', p: 'P0' },
+    { id: 'mb-2', t: 'PageSpeed mobile: capture LCP/INP/CLS for 3 priority pages', p: 'P0' },
+    { id: 'mb-3', t: 'Fix render-blocking CSS, late-loading fonts, layout shift causes', p: 'P0' },
+    { id: 'mb-4', t: 'Re-test until all priority pages "Good" on Core Web Vitals', p: 'P1' },
+    { id: 'tr-1', t: 'Verify GA4 installed on every page', p: 'P0' },
+    { id: 'tr-2', t: 'Set up form-submission event tracking sitewide', p: 'P0' },
+    { id: 'tr-3', t: 'Test every contact form actually submits to CRM', p: 'P0' },
+    { id: 'tr-4', t: 'Install call tracking (CallRail or equivalent)', p: 'P1' },
+    { id: 'tr-5', t: 'Install Microsoft Clarity for session recordings', p: 'P1' },
+    { id: 'tr-6', t: 'Build GA4 dashboard: traffic, conversion, source>landing>conversion', p: 'P1' },
+    { id: 'tp-1', t: 'Add Odoo Partner badge linked in footer', p: 'P0' },
+    { id: 'tp-2', t: 'Unify header phone format sitewide', p: 'P2' },
+    { id: 'tp-3', t: 'Unify Resources nav dropdown across all pages', p: 'P2' },
+    { id: 'tp-4', t: 'Fix homepage "Your Dynamic Snippet will be displayed here" error', p: 'P0' },
+    { id: 'tp-5', t: 'Fix Nidec card on /industry/manufacturing (Mickey Thompson text)', p: 'P0' },
+    { id: 'tp-6', t: 'Fix duplicated alt text on /service/odoo-consulting images', p: 'P2' }
+  ]},
+  { id: 'page-fixes', title: '2. Page-level fixes, meta updates, audit', tasks: [
+    { id: 'hp-1', t: 'Homepage: rewrite title to "Odoo Implementation & Consulting Partner USA | Adatasol"', p: 'P0' },
+    { id: 'hp-2', t: 'Homepage: rewrite meta description (under 160 chars)', p: 'P0' },
+    { id: 'hp-3', t: 'Homepage: change H1 to include implementation + consulting + partner', p: 'P0' },
+    { id: 'hp-4', t: 'Homepage: add Odoo Partner badge above the fold', p: 'P0' },
+    { id: 'hp-5', t: 'Homepage: add client logo strip (Mickey Thompson, Nidec, ForeverLawn, Cleveland Metroparks)', p: 'P1' },
+    { id: 'hp-6', t: 'Homepage: add FAQ block with FAQPage schema linking to top blogs', p: 'P1' },
+    { id: 'hp-7', t: 'Homepage: differentiate CTAs (Schedule Consultation + Hire Developers)', p: 'P1' },
+    { id: 'hd-1', t: '/hire-odoo-developer: rewrite title and meta', p: 'P0' },
+    { id: 'hd-2', t: '/hire-odoo-developer: change H1 to include "Dedicated", "Certified", "USA"', p: 'P0' },
+    { id: 'hd-3', t: '/hire-odoo-developer: add Engagement Models section (4 cards with rates)', p: 'P0' },
+    { id: 'hd-4', t: '/hire-odoo-developer: add Developer Profile Samples section', p: 'P1' },
+    { id: 'hd-5', t: '/hire-odoo-developer: add How Hiring Works section (5 steps)', p: 'P1' },
+    { id: 'hd-6', t: '/hire-odoo-developer: add Technical Capability Matrix', p: 'P1' },
+    { id: 'hd-7', t: '/hire-odoo-developer: expand FAQ from 6 to 12 questions', p: 'P1' },
+    { id: 'hd-8', t: '/hire-odoo-developer: differentiate CTA (Submit Hiring Brief form)', p: 'P0' },
+    { id: 'hd-9', t: '/hire-odoo-developer: fix "Cross-Functional Expertis" typo (verify first)', p: 'P2' },
+    { id: 'cd-1', t: '/service/odoo-custom-development: rewrite title (kill cannibalization)', p: 'P0' },
+    { id: 'cd-2', t: '/service/odoo-custom-development: strip "customization" stuffing', p: 'P0' },
+    { id: 'cd-3', t: '/service/odoo-custom-development: add Technical Capability section', p: 'P0' },
+    { id: 'cd-4', t: '/service/odoo-custom-development: add Upgrade-Safe Development section', p: 'P1' },
+    { id: 'cd-5', t: '/service/odoo-custom-development: add Pricing Models section with ranges', p: 'P1' },
+    { id: 'cd-6', t: '/service/odoo-custom-development: cut FAQ #8 from 300+ to 120 words', p: 'P2' },
+    { id: 'cs-1', t: '/service/odoo-consulting: retitle to lead with keyword', p: 'P0' },
+    { id: 'cs-2', t: '/service/odoo-consulting: add Cleveland/Ohio/USA geo signals', p: 'P0' },
+    { id: 'cs-3', t: '/service/odoo-consulting: link "Odoo Certified Ready Partner" to partner URL', p: 'P0' },
+    { id: 'cs-4', t: '/service/odoo-consulting: embed 3 case studies', p: 'P0' },
+    { id: 'cs-5', t: '/service/odoo-consulting: rewrite alt text on all images', p: 'P2' },
+    { id: 'oi-1', t: '/service/odoo-implementation: retitle with "USA" + "Certified Partner"', p: 'P1' },
+    { id: 'oi-2', t: '/service/odoo-implementation: add FAQPage schema on existing FAQ', p: 'P0' },
+    { id: 'oc-1', t: '/service/odoo-customization: clarify positioning vs custom-development', p: 'P0' },
+    { id: 'oc-2', t: '/service/odoo-customization: add 2 case studies + FAQ section', p: 'P1' },
+    { id: 'og-1', t: '/service/odoo-integrations: retitle with named platforms', p: 'P1' },
+    { id: 'og-2', t: '/service/odoo-integrations: add FAQ section', p: 'P1' },
+    { id: 'om-1', t: '/service/odoo-migration: add SAP to Odoo migration section', p: 'P0' },
+    { id: 'om-2', t: '/service/odoo-migration: add FAQ section + schema', p: 'P1' },
+    { id: 'ol-1', t: '/service/odoo-licensing: add Community vs Enterprise pricing breakdown', p: 'P1' },
+    { id: 'ol-2', t: '/service/odoo-licensing: link to highest-impression blog', p: 'P1' },
+    { id: 'os-1', t: '/service/odoo-support-packages: add tiered SLA packages section', p: 'P1' },
+    { id: 'os-2', t: '/service/odoo-support-packages: add FAQ + Schema', p: 'P1' },
+    { id: 'in-1', t: '/industry/manufacturing: FIX Nidec card description', p: 'P0' },
+    { id: 'in-2', t: '/industry/manufacturing: add FAQ + ROI numbers per case study', p: 'P1' },
+    { id: 'in-3', t: '/industry/healthcare: verify and fix "doctor stethoscope" heading', p: 'P1' },
+    { id: 'in-4', t: '/industry/healthcare: add HIPAA-readiness section + FAQ', p: 'P1' },
+    { id: 'in-5', t: '/industry/law-firms: add IOLTA + Conflict-Check sections + FAQ', p: 'P1' },
+    { id: 'in-6', t: '/industry/non-profits: embed Believe in Dreams case study', p: 'P0' },
+    { id: 'in-7', t: '/industry/non-profits: add Fund Accounting section + FAQ', p: 'P1' },
+    { id: 'in-8', t: '/industry/real-estate: add 2nd case study + Yardi/AppFolio FAQ', p: 'P1' }
+  ]},
+  { id: 'content-audit', title: '3. Content audit & internal linking (existing)', tasks: [
+    { id: 'ca-1', t: 'Audit blog posts for external Google Doc / Notion leaks', p: 'P0' },
+    { id: 'ca-2', t: 'Replace generic "by Adatasol" bylines with named authors + LinkedIn', p: 'P1' },
+    { id: 'ca-3', t: 'Update Article schema author from Organization to Person entity', p: 'P1' },
+    { id: 'ca-4', t: 'Add internal links from top blogs to relevant service/industry pages', p: 'P0' },
+    { id: 'ca-5', t: 'Add inline mid-post CTAs to top 5 high-impression blogs', p: 'P1' },
+    { id: 'ca-6', t: 'Resolve cannibalization: split Odoo vs SAP post (S/4HANA vs Business One)', p: 'P1' },
+    { id: 'ca-7', t: 'Consolidate thin Odoo vs X comparison posts into one super-post', p: 'P2' },
+    { id: 'ca-8', t: 'Rewrite top 5 blog titles to imply experience (anti-AI-Overview)', p: 'P1' },
+    { id: 'ca-9', t: 'Add first-person experience passages to top 5 high-impression blogs', p: 'P1' },
+    { id: 'il-1', t: 'Link /blog/how-customizable-is-odoo-7 → /service/odoo-custom-development', p: 'P1' },
+    { id: 'il-2', t: 'Link /blog/essential-questions-to-ask-an-odoo-partner-13 → /hire-odoo-developer + /service/odoo-consulting', p: 'P1' },
+    { id: 'il-3', t: 'Link /blog/when-should-a-business-hire-an-odoo-consultant-10 → /service/odoo-consulting', p: 'P1' },
+    { id: 'il-4', t: 'Build interlinking matrix between 3 priority commercial pages', p: 'P0' },
+    { id: 'il-5', t: 'Sitewide footer: add "Odoo Implementation Rescue" link', p: 'P0' }
+  ]},
+  { id: 'new-content', title: '4. New content publishing (rescue + clusters)', tasks: [
+    { id: 'rs-1', t: 'Build /service/odoo-implementation-rescue commercial landing page', p: 'P0' },
+    { id: 'rs-2', t: 'Build dedicated rescue intake form (10 fields) + CRM integration', p: 'P0' },
+    { id: 'rs-3', t: 'Build self-assessment checkbox widget for rescue page', p: 'P1' },
+    { id: 'rs-4', t: 'Test rescue intake form end-to-end', p: 'P0' },
+    { id: 'rs-5', t: 'Pillar: The Complete Odoo Implementation Rescue Guide (3000-5000 words)', p: 'P0' },
+    { id: 'rs-6', t: 'Build "Odoo Health Check Self-Audit" PDF lead magnet', p: 'P1' },
+    { id: 'rs-7', t: 'Cluster: Signs Your Odoo Implementation Is Failing', p: 'P0' },
+    { id: 'rs-8', t: 'Cluster: How to Fire Your Odoo Partner Without Losing Data', p: 'P0' },
+    { id: 'rs-9', t: 'Cluster: Inherited a Broken Odoo Instance: First 30 Days', p: 'P1' },
+    { id: 'rs-10', t: 'Cluster: What to Do When Your Odoo Go-Live Fails', p: 'P1' },
+    { id: 'rs-11', t: 'Cluster: 7 Root Causes of Failed Odoo Implementations', p: 'P2' },
+    { id: 'rs-12', t: 'Cluster: How Much Does an Odoo Rescue Cost (needs Dan pricing approval)', p: 'P2' },
+    { id: 'bx-1', t: 'Best for X: Best Odoo for Manufacturing SMBs', p: 'P1' },
+    { id: 'bx-2', t: 'Best for X: Best Odoo for Healthcare', p: 'P1' },
+    { id: 'bx-3', t: 'Best for X: Best Odoo for Real Estate', p: 'P1' },
+    { id: 'bx-4', t: 'Best for X: Best Odoo for Law Firms', p: 'P2' },
+    { id: 'bx-5', t: 'Best for X: Best Odoo for Non-Profits', p: 'P2' },
+    { id: 'al-1', t: 'Alternatives: Odoo Alternatives for Small Business', p: 'P1' },
+    { id: 'al-2', t: 'Alternatives: Odoo Alternatives for Manufacturing', p: 'P2' },
+    { id: 'al-3', t: 'Alternatives: Best Open-Source ERP Alternatives to Odoo', p: 'P2' },
+    { id: 'iw-1', t: 'Industry deep-dive: Manufacturing Odoo lead-gen content (10 articles)', p: 'P1' },
+    { id: 'iw-2', t: 'Industry deep-dive: Healthcare Odoo lead-gen content (10 articles)', p: 'P2' },
+    { id: 'iw-3', t: 'Industry deep-dive: Real Estate Odoo lead-gen content (10 articles)', p: 'P2' }
+  ]},
+  { id: 'authority', title: '5. Authority, local SEO, AEO', tasks: [
+    { id: 'au-1', t: 'Claim and verify Google Business Profile for Cleveland office', p: 'P0' },
+    { id: 'au-2', t: 'Complete 100% of GBP fields (categories, services, photos, hours)', p: 'P1' },
+    { id: 'au-3', t: 'Set up weekly GBP post cadence', p: 'P2' },
+    { id: 'au-4', t: 'List on Clutch.co with full profile', p: 'P0' },
+    { id: 'au-5', t: 'List on G2', p: 'P1' },
+    { id: 'au-6', t: 'List on Capterra', p: 'P1' },
+    { id: 'au-7', t: 'List on GoodFirms', p: 'P2' },
+    { id: 'au-8', t: 'List on Manifest, DesignRush, UpCity', p: 'P2' },
+    { id: 'au-9', t: 'NAP consistency audit across all listings', p: 'P0' },
+    { id: 'au-10', t: 'Set up HARO/Qwoted profile, monitor daily', p: 'P1' },
+    { id: 'au-11', t: 'Pitch 3 ERP publications for guest posts', p: 'P2' },
+    { id: 'au-12', t: 'Pitch case study syndication to industry pubs', p: 'P2' },
+    { id: 'ae-1', t: 'Create llms.txt at /llms.txt root', p: 'P1' },
+    { id: 'ae-2', t: 'Build Organization schema sameAs chain', p: 'P0' },
+    { id: 'ae-3', t: 'Set up monthly tracking of branded queries in ChatGPT/Claude/Gemini/Perplexity', p: 'P2' },
+    { id: 'au-13', t: 'Conversion tracking dashboard (weekly): leads, source, CAC', p: 'P0' }
+  ]}
+];
+
+const planData = [
+  { id: 'track-1', title: 'Track 1: Technical fixes & audit', taskIds: ['sm-6', 'fx-3', 'rb-1', 'sc-1', 'sc-7', 'mb-3', 'tr-3', 'tp-1', 'tp-4', 'tp-5'] },
+  { id: 'track-2', title: 'Track 2: Page-level fixes & meta', taskIds: ['hp-1', 'hp-4', 'hd-1', 'hd-3', 'cd-1', 'cs-4', 'in-1', 'in-6', 'oi-2'] },
+  { id: 'track-3', title: 'Track 3: Content audit + interlinking', taskIds: ['ca-1', 'ca-2', 'ca-3', 'ca-4', 'ca-8', 'il-4', 'il-5'] },
+  { id: 'track-4', title: 'Track 4: New content publishing', taskIds: ['rs-1', 'rs-2', 'rs-4', 'rs-5', 'rs-7', 'rs-8', 'rs-9', 'rs-10', 'bx-1', 'al-1'] },
+  { id: 'track-5', title: 'Track 5: Authority + local SEO', taskIds: ['au-1', 'au-4', 'au-9', 'ae-1', 'ae-2', 'au-13'] }
+];
+
+const seedContent = [
+  { id: 'c1', type: 'rescue', title: '/service/odoo-implementation-rescue landing page', keyword: 'odoo implementation rescue', target: '/service/odoo-implementation-rescue', status: 'idea', author: '', week: 1, notes: 'P0. Must ship Week 1. Includes intake form, FAQ, schema.' },
+  { id: 'c2', type: 'rescue', title: 'PILLAR: The Complete Odoo Implementation Rescue Guide', keyword: 'odoo implementation rescue', target: '/blog/.../complete-odoo-rescue-guide', status: 'idea', author: '', week: 2, notes: '3000-5000 words. Embeds checklist + lead magnet PDF.' },
+  { id: 'c3', type: 'rescue', title: 'Signs Your Odoo Implementation Is Failing', keyword: 'signs odoo implementation failing', target: '/blog/.../signs-odoo-failing', status: 'idea', author: '', week: 2, notes: '1500-2000 words. Self-assessment checklist style.' },
+  { id: 'c4', type: 'rescue', title: 'How to Fire Your Odoo Partner Without Losing Data', keyword: 'fire odoo partner', target: '/blog/.../fire-odoo-partner', status: 'idea', author: '', week: 3, notes: 'Highest-converting post. Legal review needed before publish.' },
+  { id: 'c5', type: 'rescue', title: 'Inherited a Broken Odoo Instance: First 30 Days', keyword: 'inherited broken odoo', target: '/blog/.../inherited-broken-odoo', status: 'idea', author: '', week: 3, notes: 'Diagnostic tools/templates Adatasol uses.' },
+  { id: 'c6', type: 'rescue', title: 'What to Do When Your Odoo Go-Live Fails', keyword: 'odoo go-live failed', target: '/blog/.../go-live-failed', status: 'idea', author: '', week: 4, notes: 'Emergency triage tone. 1200-1800 words.' },
+  { id: 'c7', type: 'rescue', title: '7 Root Causes of Failed Odoo Implementations', keyword: 'why odoo implementations fail', target: '/blog/.../7-root-causes', status: 'idea', author: '', week: 4, notes: 'Evergreen authority piece.' },
+  { id: 'c8', type: 'rescue', title: 'How Much Does an Odoo Implementation Rescue Cost?', keyword: 'odoo rescue cost', target: '/blog/.../rescue-cost', status: 'idea', author: '', week: 4, notes: 'Needs Dan pricing approval before drafting.' },
+  { id: 'c9', type: 'commercial', title: 'Homepage rewrite (title, meta, H1, FAQ)', keyword: 'odoo implementation partner usa', target: '/', status: 'idea', author: '', week: 1, notes: 'Add Odoo Partner badge above fold. Client logo strip.' },
+  { id: 'c10', type: 'commercial', title: '/hire-odoo-developer rewrite (engagement models, profiles)', keyword: 'hire odoo developer', target: '/hire-odoo-developer', status: 'idea', author: '', week: 1, notes: 'Add 4 engagement model cards with rates.' },
+  { id: 'c11', type: 'commercial', title: '/service/odoo-custom-development rewrite (kill cannibalization)', keyword: 'odoo custom development services', target: '/service/odoo-custom-development', status: 'idea', author: '', week: 2, notes: 'Strip customization stuffing. Add tech capability matrix.' },
+  { id: 'c12', type: 'commercial', title: '/service/odoo-consulting enrich (case studies, geo, partner badge)', keyword: 'odoo consulting services usa', target: '/service/odoo-consulting', status: 'idea', author: '', week: 2, notes: 'Embed 3 case studies. Add Cleveland/Ohio geo block.' },
+  { id: 'c13', type: 'bestfor', title: 'Best Odoo for Manufacturing SMBs', keyword: 'best odoo for manufacturing', target: '/blog/.../best-odoo-manufacturing', status: 'idea', author: '', week: 3, notes: 'Catches mid-funnel. Links to industry/manufacturing.' },
+  { id: 'c14', type: 'bestfor', title: 'Best Odoo for Healthcare', keyword: 'best odoo for healthcare', target: '/blog/.../best-odoo-healthcare', status: 'idea', author: '', week: 4, notes: 'HIPAA-readiness focus. Links to industry/healthcare.' },
+  { id: 'c15', type: 'bestfor', title: 'Best Odoo for Real Estate', keyword: 'best odoo for real estate', target: '/blog/.../best-odoo-real-estate', status: 'idea', author: '', week: 4, notes: 'Property mgmt features. Links to industry/real-estate.' },
+  { id: 'c16', type: 'alt', title: 'Odoo Alternatives for Small Business', keyword: 'odoo alternatives small business', target: '/blog/.../odoo-alternatives-smb', status: 'idea', author: '', week: 3, notes: 'Catches outbound traffic from people considering switching.' },
+  { id: 'c17', type: 'alt', title: 'Odoo Alternatives for Manufacturing', keyword: 'odoo alternatives manufacturing', target: '/blog/.../odoo-alternatives-mfg', status: 'idea', author: '', week: 4, notes: 'Frames Odoo as #1 choice while addressing alternatives.' },
+  { id: 'c18', type: 'industry', title: 'Manufacturing: 10 ways Odoo MRP cuts production downtime', keyword: 'odoo mrp manufacturing', target: '/blog/.../odoo-mrp-downtime', status: 'idea', author: '', week: 4, notes: 'Industry deep-dive series, 10 articles for manufacturing.' },
+  { id: 'c19', type: 'industry', title: 'Healthcare: HIPAA considerations when implementing Odoo', keyword: 'odoo hipaa healthcare', target: '/blog/.../odoo-hipaa', status: 'idea', author: '', week: 4, notes: 'Healthcare deep-dive series.' }
+];
+
+if (!state.content || state.content.length === 0) {
+  state.content = seedContent.slice();
+  saveState();
+}
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab).classList.add('active');
+    if (tab.dataset.tab === 'performance') initPerformanceCharts();
+    if (tab.dataset.tab === 'audience') initAudienceCharts();
+    if (tab.dataset.tab === 'indexing') initIndexingCharts();
+    if (tab.dataset.tab === 'queries') renderQueries();
+    if (tab.dataset.tab === 'pages') renderPages();
+    if (tab.dataset.tab === 'calendar') renderCalendar();
+  });
+});
+
+function toggleTask(id) {
+  if (state.tasks[id]) {
+    delete state.tasks[id];
+    delete state.tasksMeta[id];
+  } else {
+    state.tasks[id] = true;
+    state.tasksMeta[id] = { by: state.userName || 'anonymous', at: new Date().toISOString().split('T')[0] };
+  }
+  saveState();
+  renderFixes();
+  renderPlan();
+  renderFixesSummary();
+}
+
+function renderFixes() {
+  const container = document.getElementById('fixesList');
+  if (!container) return;
+  container.innerHTML = fixesData.map(section => {
+    const total = section.tasks.length;
+    const done = section.tasks.filter(t => state.tasks[t.id]).length;
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+    return `<div class="checklist-section">
+      <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-title"><span class="caret">▶</span>${section.title}</div>
+        <div class="section-progress">
+          <span>${done} / ${total}</span>
+          <div class="progress-mini"><div class="progress-mini-fill" style="width: ${pct}%"></div></div>
+        </div>
+      </div>
+      <div class="section-body">
+        ${section.tasks.map(task => {
+          const isDone = !!state.tasks[task.id];
+          const meta = state.tasksMeta[task.id];
+          return `<div class="task ${isDone ? 'done' : ''}">
+            <input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggleTask('${task.id}')" id="fx-${task.id}">
+            <label for="fx-${task.id}">${task.t}${isDone && meta ? `<span class="done-by">✓ ${meta.by} on ${meta.at}</span>` : ''}</label>
+            <span class="priority p-${task.p.toLowerCase()}">${task.p}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderPlan() {
+  const container = document.getElementById('planList');
+  if (!container) return;
+  const taskById = {};
+  fixesData.forEach(s => s.tasks.forEach(t => { taskById[t.id] = t; }));
+  container.innerHTML = planData.map(section => {
+    const tasks = section.taskIds.map(id => taskById[id]).filter(Boolean);
+    const total = tasks.length;
+    const done = tasks.filter(t => state.tasks[t.id]).length;
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+    return `<div class="checklist-section">
+      <div class="section-header open" onclick="toggleSection(this)">
+        <div class="section-title"><span class="caret">▶</span>${section.title}</div>
+        <div class="section-progress">
+          <span>${done} / ${total}</span>
+          <div class="progress-mini"><div class="progress-mini-fill" style="width: ${pct}%"></div></div>
+        </div>
+      </div>
+      <div class="section-body open">
+        ${tasks.map(task => {
+          const isDone = !!state.tasks[task.id];
+          const meta = state.tasksMeta[task.id];
+          return `<div class="task ${isDone ? 'done' : ''}">
+            <input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggleTask('${task.id}')" id="pl-${task.id}">
+            <label for="pl-${task.id}">${task.t}${isDone && meta ? `<span class="done-by">✓ ${meta.by} on ${meta.at}</span>` : ''}</label>
+            <span class="priority p-${task.p.toLowerCase()}">${task.p}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleSection(headerEl) {
+  headerEl.classList.toggle('open');
+  const body = headerEl.nextElementSibling;
+  if (body) body.classList.toggle('open');
+}
+
+document.getElementById('expandAllFixes').addEventListener('click', () => {
+  document.querySelectorAll('#fixesList .section-body').forEach(b => b.classList.add('open'));
+  document.querySelectorAll('#fixesList .section-header').forEach(b => b.classList.add('open'));
+});
+document.getElementById('collapseAllFixes').addEventListener('click', () => {
+  document.querySelectorAll('#fixesList .section-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('#fixesList .section-header').forEach(b => b.classList.remove('open'));
+});
+document.getElementById('resetFixes').addEventListener('click', () => {
+  if (confirm('Reset all task progress for ' + (state.userName || 'this user') + '? Cannot be undone.')) {
+    state.tasks = {};
+    state.tasksMeta = {};
+    saveState();
+    renderFixes();
+    renderPlan();
+    renderFixesSummary();
+    showToast('Progress reset', 'success');
+  }
+});
+
+function renderFixesSummary() {
+  const all = fixesData.flatMap(s => s.tasks);
+  const total = all.length;
+  const done = all.filter(t => state.tasks[t.id]).length;
+  const p0 = all.filter(t => t.p === 'P0');
+  const p0done = p0.filter(t => state.tasks[t.id]).length;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  const pctP0 = p0.length > 0 ? Math.round((p0done / p0.length) * 100) : 0;
+  document.getElementById('fixesSummary').innerHTML = `
+    <div class="metric"><div class="metric-label">Total tasks</div><div class="metric-value">${total}</div><div class="metric-sub">${done} completed</div></div>
+    <div class="metric"><div class="metric-label">Overall progress</div><div class="metric-value">${pct}%</div><div class="metric-sub">across all tracks</div></div>
+    <div class="metric danger"><div class="metric-label">P0 critical</div><div class="metric-value">${pctP0}%</div><div class="metric-sub">${p0done} of ${p0.length}</div></div>
+    <div class="metric"><div class="metric-label">Remaining</div><div class="metric-value">${total - done}</div><div class="metric-sub">tasks open</div></div>
+  `;
+}
+
+const queriesData = `hire odoo developer,0,238,53.39
+odoo consulting services,0,166,42.95
+hire odoo developers,0,133,67.5
+odoo consulting,0,121,54.06
+odoo implementation services,0,104,35.42
+odoo implementation company,0,99,52.02
+odoo erp implementation company,0,92,28.22
+hire dedicated odoo developer,0,90,43.56
+odoo custom development services,0,84,19.65
+best erp software for small businesses 2026,0,81,18.26
+odoo vs sap,0,81,52.07
+odoo implementation partner,0,77,52.36
+hire odoo expert,0,62,42.79
+sap vs odoo,0,59,52.27
+odoo development services,0,50,44.02
+odoo community vs enterprise differences 2026,0,47,7.09
+odoo erp consulting services,0,46,38.57
+odoo erp implementation services,0,43,24.33
+custom odoo development services,0,41,24.24
+odoo implementation partner in usa,0,39,19.77
+custom odoo development,0,36,25.67
+hire odoo consultant,0,36,34.53
+odoo vs sap business one,0,33,36.73
+odoo development and customization services,0,32,68.38
+sap business one vs odoo comparison 2025 2026,0,30,4.17
+odoo vs sap comparison 2025 2026,0,30,8.77
+odoo customization company,0,30,72.37
+odoo consulting company,0,30,76.57
+better erp than odoo for discrete manufacturing with complex boms,0,29,2.93
+migratie van sap business one naar odoo,0,29,32.59
+odoo vs sap business one - detailed feature and price comparison,0,28,2.21
+odoo erp implementation partner,0,27,22.78
+odoo implementation service,0,27,36.96
+migrate sap to odoo,0,27,41.52
+odoo vs sap business one detailed feature comparison 2025 2026,0,26,4.46
+odoo integration services in usa,0,26,17.5
+adatasol,0,25,1
+consulting odoo,0,25,34.64
+odoo erp consulting company,0,25,76.56
+erp odoo implementation partner,0,23,16.57
+odoo customization partner in usa,0,23,17.83
+odoo erp implementation in us,0,23,24.13
+hire odoo erp developer,0,23,67.22
+odoo erp review 2025 2026,0,22,17.77
+hire offshore odoo developers,0,20,67.25
+odoo erp services company,0,19,12.79
+custom odoo development company,0,19,21.89
+odoo consulting partner ohio,0,17,23.06
+odoo implementation in usa,0,17,31.18
+best erp systems for small businesses 2026,0,16,16.38
+best odoo modules for service-based businesses 2026,0,16,17.75
+odoo enterprise,0,16,34.19
+odoo stabilization,0,15,14.53
+odoo community vs enterprise pricing 2026,0,14,4.79
+odoo enterprise vs community pricing comparison 2026,0,14,8.71
+odoo operations management features modules,0,14,9.71
+odoo consultants ohio,0,14,26.86
+odoo consultation,0,14,43.71
+integrated crm and erp for small businesses under 50 employees,0,13,2.38
+most affordable erp software under $50 per user per month 2026,0,13,8.31
+odoo customization developer,0,13,22.08
+best erp systems for small companies,0,13,65.46
+odoo community vs enterprise edition differences 2026,0,12,7.5
+odoo consulting company ohio,0,12,16.08
+odoo custom development,0,12,32.08
+best erp for small businesses under 50 employees,0,11,4.45
+is odoo highly customizable,0,11,6.55
+odoo community vs enterprise 2026,0,11,8
+odoo community vs enterprise,0,11,42.18
+simple erp system,0,11,62.27
+is odoo manufacturing suitable for job shop vs high-volume manufacturing,0,10,1.2
+best erp solutions for small businesses that scale 2026,0,10,17.8
+enterprise odoo,0,10,25.1
+odoo for real estate,0,10,43.5
+odoo community vs enterprise pricing differences 2026,0,9,6.78
+odoo community edition vs enterprise edition differences limitations 2026,0,9,7
+odoo community vs enterprise comparison 2026 accounting sales inventory,0,9,7.44
+odoo operations management modules features,0,9,8
+odoo partner north carolina,0,9,11.67
+odoo services provider,0,9,59.44
+hire odoo apps & themes developer,0,9,87.11
+connect me with an odoo erp consultant for custom module development,0,8,6.62
+affordable enterprise-grade erp options,0,8,13.88
+odoo manufacturing implementation services partners,0,8,18.75
+odoo legal,0,8,27.12
+odoo development and customisation,0,8,31.5
+customized odoo solutions,0,8,57.88
+odoo community enterprise,0,8,58.38
+sap business one vs odoo comparison 2025 2026 smb erp,0,7,2.71
+odoo vs sap comparison 2026,0,7,4.29
+odoo features and modules,0,7,4.43
+odoo pricing community vs enterprise 2026,0,7,5.71
+odoo erp for billing and invoicing healthcare,0,7,12.86
+odoo manufacturing module features review,0,7,6.43
+odoo solution for real estate,0,7,44.71
+real estate odoo solution,0,6,33.83
+odoo erp for real estate,0,6,28.5
+odoo for non-profits,0,5,27.4
+odoo real estate,0,5,36.4
+odoo erp services in usa,0,5,18.4
+odoo healthcare,0,5,14.5
+odoo for nonprofits,0,4,29.25
+odoo medical,0,4,46.25
+odoo law firm,0,4,9.5
+sap to odoo migration,0,3,45
+odoo erp for non profits,0,3,16
+odoo enterprise version,0,3,33.67
+healthcare administration,0,3,1
+odoo support services,0,3,21.67
+odoo erp support in us,0,3,18.67
+odoo medical solution,0,3,8.33
+nonprofit odoo,0,2,21
+odoo support package,0,2,14.5
+odoo erp support services,0,2,80
+advanced odoo customization services,0,1,28
+odoo customization partner,0,1,26
+odoo real estate management,0,1,36`.trim().split('\n').map(r => {
+  const parts = r.split(',');
+  return { q: parts[0], c: +parts[1], i: +parts[2], p: +parts[3] };
+});
+
+const pagesDataRaw = `https://odoo.adatasol.com/,2,982,33.97
+https://odoo.adatasol.com/blog/blog-1/odoo-vs-infor-erp-comparison-53,1,315,5.95
+https://odoo.adatasol.com/blog/blog-1/common-myths-about-odoo-erp-22,1,24,8.5
+https://odoo.adatasol.com/blog/blog-1/best-erp-systems-small-businesses-39,0,1744,9.74
+https://odoo.adatasol.com/blog/blog-1/what-is-the-difference-between-odoo-community-and-enterprise-19,0,1364,9.02
+https://odoo.adatasol.com/blog/blog-1/odoo-vs-sap-which-erp-is-right-for-your-business-27,0,1354,14.6
+https://odoo.adatasol.com/hire-odoo-developer,0,647,54.23
+https://odoo.adatasol.com/service/odoo-consulting,0,409,45.38
+https://odoo.adatasol.com/blog/blog-1/odoo-vs-epicor-manufacturing-erp-comparison-52,0,381,5.57
+https://odoo.adatasol.com/service/odoo-custom-development,0,373,34.59
+https://odoo.adatasol.com/blog/blog-1/what-modules-are-included-in-odoo-8,0,253,9.77
+https://odoo.adatasol.com/industry/law-firms,0,112,9.68
+https://odoo.adatasol.com/blog/blog-1/is-odoo-erp-worth-the-investment-20,0,111,12.25
+https://odoo.adatasol.com/blog/blog-1/how-long-does-odoo-implementation-take-17,0,98,7.48
+https://odoo.adatasol.com/about,0,97,6.49
+https://odoo.adatasol.com/blog/blog-1/what-is-odoo-4,0,79,9.23
+https://odoo.adatasol.com/blog/blog-1/how-does-odoo-compare-to-other-erp-systems-6,0,78,11.14
+https://odoo.adatasol.com/industry/real-estate,0,60,27.2
+https://odoo.adatasol.com/industry/healthcare,0,57,7.21
+https://odoo.adatasol.com/industry/non-profits,0,57,11.74
+https://odoo.adatasol.com/blog/blog-1/cloud-erp-vs-on-premise-erp-34,0,54,6.09
+https://odoo.adatasol.com/blog/blog-1/what-is-erp-enterprise-resource-planning-30,0,38,6.92
+https://odoo.adatasol.com/blog/blog-1/erp-vs-crm-36,0,31,3.77
+https://odoo.adatasol.com/blog/blog-1/erp-implementation-partner-vs-in-house-41,0,31,5.65
+https://odoo.adatasol.com/case-study/fleet-management-cleveland-metroparks,0,28,5.43
+https://odoo.adatasol.com/blog/blog-1/how-customizable-is-odoo-7,0,27,7.48
+https://odoo.adatasol.com/odoo-implementation-development-north-carolina,0,26,8.38
+https://odoo.adatasol.com/location-we-serve,0,20,13.45
+https://odoo.adatasol.com/case-studies,0,13,5.54
+https://odoo.adatasol.com/blog/blog-1/how-to-find-a-reliable-odoo-consultant-12,0,13,6.54
+https://odoo.adatasol.com/blog/blog-1/odoo-implementation-comprehensive-guide-14,0,13,7.38
+https://odoo.adatasol.com/odoo-implementation-development-kettering,0,10,19
+https://odoo.adatasol.com/case-study/lakecountyadamhs,0,8,9.12
+https://odoo.adatasol.com/blog/blog-1/common-odoo-implementation-challenges-11,0,7,8.57
+https://odoo.adatasol.com/odoo-implementation-development-columbus,0,6,7.33
+https://odoo.adatasol.com/case-study/manufacturing-mickey-thompson-tires,0,6,8.17
+https://odoo.adatasol.com/schedule-call,0,6,9.33
+https://odoo.adatasol.com/blog/blog-1/how-to-choose-erp-manufacturing-business-62,0,6,17.33
+https://odoo.adatasol.com/odoo-implementation-development-canton,0,6,22.33
+https://odoo.adatasol.com/blog/blog-1,0,5,9.4
+https://odoo.adatasol.com/manufacturing-nidec-industrial-automation,0,5,9.6
+https://odoo.adatasol.com/odoo-implementation-development-cleveland,0,4,5
+https://odoo.adatasol.com/case-study/manufacturing-great-lakes-power,0,4,5.75
+https://odoo.adatasol.com/case-study/manufacturing-winar-connection,0,4,7.5
+https://odoo.adatasol.com/odoo-implementation-development-new-jersey,0,4,9
+https://odoo.adatasol.com/case-study/commercial-real-estate-putman-properties,0,3,3.33
+https://odoo.adatasol.com/terms,0,3,19
+https://odoo.adatasol.com/case-study/manufacturing-tallmadge-spinning-metal,0,2,5
+https://odoo.adatasol.com/odoo-implementation-development-hamilton,0,2,6.5
+https://odoo.adatasol.com/odoo-implementation-development-toledo,0,2,11.5
+https://odoo.adatasol.com/case-study/manufacturing-mickey-thompson-pto,0,2,13`.trim().split('\n').map(r => {
+  const parts = r.split(',');
+  return { url: parts[0].replace('https://odoo.adatasol.com', ''), c: +parts[1], i: +parts[2], p: +parts[3] };
+});
+
+const countriesDataRaw = `United States,3,5550,21.53
+India,1,277,30.11
+Brazil,0,273,7.64
+Canada,0,250,13.01
+United Kingdom,0,183,22.91
+Indonesia,0,137,31.16
+Spain,0,133,17.2
+Germany,0,119,23.94
+Mexico,0,108,8.6
+China,0,100,6.46
+France,0,89,8.72
+Netherlands,0,71,18.42
+Vietnam,0,57,6.67
+Australia,0,55,14.87
+Argentina,0,54,7.48
+Italy,0,50,10.96
+Japan,0,45,7.36
+Turkey,0,45,9.07
+Hong Kong,0,43,7.51
+Saudi Arabia,0,42,20.24
+Egypt,0,42,25.52
+Iran,0,41,6.15
+Ukraine,0,41,7.27
+Pakistan,0,40,13.12
+United Arab Emirates,0,40,14.78
+Colombia,0,39,7.49
+Bangladesh,0,37,9.59
+Belgium,0,37,13.27
+Malaysia,0,34,7.03`.trim().split('\n').map(r => {
+  const p = r.split(',');
+  return { c: p[0], cl: +p[1], i: +p[2], p: +p[3] };
+});
+
+const trendDataRaw = `2026-01-22,24
+2026-01-23,16
+2026-01-24,22
+2026-01-25,22
+2026-01-26,46
+2026-01-27,29
+2026-01-28,34
+2026-01-29,53
+2026-01-30,27
+2026-01-31,31
+2026-02-01,42
+2026-02-02,170
+2026-02-03,47
+2026-02-04,64
+2026-02-05,42
+2026-02-06,40
+2026-02-07,36
+2026-02-08,73
+2026-02-09,70
+2026-02-10,72
+2026-02-11,68
+2026-02-12,76
+2026-02-13,45
+2026-02-14,44
+2026-02-15,53
+2026-02-16,99
+2026-02-17,58
+2026-02-18,60
+2026-02-19,54
+2026-02-20,43
+2026-02-21,33
+2026-02-22,48
+2026-02-23,70
+2026-02-24,47
+2026-02-25,93
+2026-02-26,76
+2026-02-27,87
+2026-02-28,67
+2026-03-01,118
+2026-03-02,124
+2026-03-03,167
+2026-03-04,234
+2026-03-05,250
+2026-03-06,202
+2026-03-07,318
+2026-03-08,352
+2026-03-09,418
+2026-03-10,347
+2026-03-11,450
+2026-03-12,465
+2026-03-13,300
+2026-03-14,201
+2026-03-15,228
+2026-03-16,336
+2026-03-17,350
+2026-03-18,389
+2026-03-19,431
+2026-03-20,416
+2026-03-21,260
+2026-03-22,275
+2026-03-23,273
+2026-03-24,229
+2026-03-25,325
+2026-03-26,343
+2026-03-27,261
+2026-03-28,223
+2026-03-29,358
+2026-03-30,370
+2026-03-31,260
+2026-04-01,296
+2026-04-02,334
+2026-04-03,251
+2026-04-04,207
+2026-04-05,169
+2026-04-06,299
+2026-04-07,270
+2026-04-08,258
+2026-04-09,268
+2026-04-10,212
+2026-04-11,166
+2026-04-12,197
+2026-04-13,268
+2026-04-14,479
+2026-04-15,529
+2026-04-16,533
+2026-04-17,401`.trim().split('\n').map(r => { const p = r.split(','); return { d: p[0], i: +p[1] }; });
+
+const indexTrendRaw = `2026-01-24,93,20
+2026-01-31,96,28
+2026-02-07,99,27
+2026-02-14,106,25
+2026-02-21,101,25
+2026-02-28,91,35
+2026-03-07,97,43
+2026-03-14,100,50
+2026-03-21,105,50
+2026-03-28,115,54
+2026-04-04,114,57
+2026-04-11,116,59
+2026-04-17,116,58`.trim().split('\n').map(r => { const p = r.split(','); return { d: p[0], ni: +p[1], i: +p[2] }; });
+
+let queryFilter = 'commercial';
+let querySort = { col: 'i', dir: 'desc' };
+let pageFilter = 'all';
+let pageSort = { col: 'i', dir: 'desc' };
+
+function filterQueries(list) {
+  if (queryFilter === 'all') return list;
+  if (queryFilter === 'commercial') return list.filter(q => /hire|consulting|implementation|custom development|partner|services|developer|consultant/i.test(q.q) && !/vs |alternative|comparison|differences|community vs|cost|pricing/i.test(q.q));
+  if (queryFilter === 'hire') return list.filter(q => /hire|developer|expert|consultant|offshore/i.test(q.q));
+  if (queryFilter === 'comparison') return list.filter(q => /vs |comparison|alternative|community vs|differences/i.test(q.q));
+  if (queryFilter === 'ohio') return list.filter(q => /ohio|cleveland|columbus|carolina|usa|us|america/i.test(q.q));
+  if (queryFilter === 'quickwins') return list.filter(q => q.p >= 11 && q.p <= 20);
+  return list;
+}
+
+function renderQueries() {
+  const search = document.getElementById('querySearch').value.toLowerCase();
+  let list = queriesData.slice();
+  list = filterQueries(list);
+  if (search) list = list.filter(q => q.q.toLowerCase().includes(search));
+  list.sort((a, b) => {
+    const aval = a[querySort.col];
+    const bval = b[querySort.col];
+    const cmp = (typeof aval === 'string') ? aval.localeCompare(bval) : aval - bval;
+    return querySort.dir === 'asc' ? cmp : -cmp;
+  });
+  const tbody = document.querySelector('#queryTable tbody');
+  tbody.innerHTML = list.map(q => {
+    const cls = q.p <= 10 ? 'pos-good' : q.p <= 30 ? 'pos-mid' : 'pos-bad';
+    return `<tr><td>${q.q}</td><td class="num">${q.i.toLocaleString()}</td><td class="num">${q.c}</td><td class="num ${cls}">${q.p.toFixed(1)}</td></tr>`;
+  }).join('');
+}
+
+document.querySelectorAll('[data-qfilter]').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('[data-qfilter]').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    queryFilter = b.dataset.qfilter;
+    renderQueries();
+  });
+});
+document.getElementById('querySearch').addEventListener('input', renderQueries);
+document.querySelectorAll('#queryTable th[data-sort]').forEach(th => {
+  th.addEventListener('click', () => {
+    const col = th.dataset.sort;
+    if (querySort.col === col) querySort.dir = querySort.dir === 'asc' ? 'desc' : 'asc';
+    else { querySort.col = col; querySort.dir = 'desc'; }
+    document.querySelectorAll('#queryTable th').forEach(x => { x.classList.remove('sorted'); const a = x.querySelector('.arrow'); if (a) a.textContent = ''; });
+    th.classList.add('sorted');
+    th.querySelector('.arrow').textContent = querySort.dir === 'asc' ? '▲' : '▼';
+    renderQueries();
+  });
+});
+
+function filterPages(list) {
+  if (pageFilter === 'all') return list;
+  if (pageFilter === 'commercial') return list.filter(p => /service\/|hire-|^\/$/.test(p.url));
+  if (pageFilter === 'blog') return list.filter(p => /blog/.test(p.url));
+  if (pageFilter === 'industry') return list.filter(p => /industry/.test(p.url));
+  if (pageFilter === 'case') return list.filter(p => /case-stud/.test(p.url));
+  if (pageFilter === 'zeroclick') return list.filter(p => p.c === 0 && p.i >= 50);
+  return list;
+}
+
+function renderPages() {
+  const search = document.getElementById('pageSearch').value.toLowerCase();
+  let list = pagesDataRaw.slice();
+  list = filterPages(list);
+  if (search) list = list.filter(p => p.url.toLowerCase().includes(search));
+  list.sort((a, b) => {
+    const aval = a[pageSort.col];
+    const bval = b[pageSort.col];
+    const cmp = (typeof aval === 'string') ? aval.localeCompare(bval) : aval - bval;
+    return pageSort.dir === 'asc' ? cmp : -cmp;
+  });
+  const tbody = document.querySelector('#pageTable tbody');
+  tbody.innerHTML = list.map(p => {
+    const cls = p.p <= 10 ? 'pos-good' : p.p <= 30 ? 'pos-mid' : 'pos-bad';
+    return `<tr><td class="url">${p.url}</td><td class="num">${p.i.toLocaleString()}</td><td class="num">${p.c}</td><td class="num ${cls}">${p.p.toFixed(1)}</td></tr>`;
+  }).join('');
+}
+
+document.querySelectorAll('[data-pfilter]').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('[data-pfilter]').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    pageFilter = b.dataset.pfilter;
+    renderPages();
+  });
+});
+document.getElementById('pageSearch').addEventListener('input', renderPages);
+document.querySelectorAll('#pageTable th[data-sort]').forEach(th => {
+  th.addEventListener('click', () => {
+    const col = th.dataset.sort;
+    if (pageSort.col === col) pageSort.dir = pageSort.dir === 'asc' ? 'desc' : 'asc';
+    else { pageSort.col = col; pageSort.dir = 'desc'; }
+    document.querySelectorAll('#pageTable th').forEach(x => { x.classList.remove('sorted'); const a = x.querySelector('.arrow'); if (a) a.textContent = ''; });
+    th.classList.add('sorted');
+    th.querySelector('.arrow').textContent = pageSort.dir === 'asc' ? '▲' : '▼';
+    renderPages();
+  });
+});
+
+const issuesData = [
+  { r: 'Discovered, currently not indexed', s: 'Google systems', v: 'Passed', n: 66 },
+  { r: 'Not found (404)', s: 'Website', v: 'Started', n: 27 },
+  { r: 'Crawled, currently not indexed', s: 'Google systems', v: 'Failed', n: 12 },
+  { r: 'Page with redirect', s: 'Website', v: 'Failed', n: 5 },
+  { r: 'Blocked by robots.txt', s: 'Website', v: 'Not Started', n: 2 },
+  { r: 'Redirect error', s: 'Website', v: 'Started', n: 2 },
+  { r: 'Excluded by noindex tag', s: 'Website', v: 'Not Started', n: 1 },
+  { r: 'Duplicate, Google chose different canonical', s: 'Google systems', v: 'Not Started', n: 1 }
+];
+
+document.getElementById('issuesBody').innerHTML = issuesData.map(x => {
+  const colorMap = { 'Failed': 'pos-bad', 'Started': 'pos-mid', 'Passed': 'pos-good', 'Not Started': '' };
+  return `<tr><td>${x.r}</td><td>${x.s}</td><td class="${colorMap[x.v]}">${x.v}</td><td class="num">${x.n}</td></tr>`;
+}).join('');
+
+document.querySelectorAll('#countryTable').forEach(t => {
+  t.querySelector('tbody').innerHTML = countriesDataRaw.map(c => {
+    const cls = c.p <= 10 ? 'pos-good' : c.p <= 30 ? 'pos-mid' : 'pos-bad';
+    const ctr = c.i > 0 ? ((c.cl / c.i) * 100).toFixed(2) + '%' : '0%';
+    return `<tr><td>${c.c}</td><td class="num">${c.i.toLocaleString()}</td><td class="num">${c.cl}</td><td class="num">${ctr}</td><td class="num ${cls}">${c.p.toFixed(1)}</td></tr>`;
+  }).join('');
+});
+
+const chartDefaults = {
+  color: '#a0a0a8',
+  borderColor: '#2a2a32',
+  gridColor: '#22222a'
+};
+
+Chart.defaults.color = chartDefaults.color;
+Chart.defaults.borderColor = chartDefaults.borderColor;
+Chart.defaults.font.family = 'Inter, sans-serif';
+Chart.defaults.font.size = 11;
+
+let chartsInit = { performance: false, audience: false, indexing: false };
+
+function initPerformanceCharts() {
+  if (chartsInit.performance) return;
+  chartsInit.performance = true;
+
+  new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+      labels: trendDataRaw.map(d => d.d.slice(5)),
+      datasets: [{
+        label: 'Daily impressions',
+        data: trendDataRaw.map(d => d.i),
+        borderColor: '#d4a574',
+        backgroundColor: 'rgba(212, 165, 116, 0.08)',
+        fill: true,
+        tension: 0.3,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+      scales: {
+        x: { grid: { color: chartDefaults.gridColor }, ticks: { maxTicksLimit: 12 } },
+        y: { grid: { color: chartDefaults.gridColor }, beginAtZero: true }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('indexChart'), {
+    type: 'line',
+    data: {
+      labels: indexTrendRaw.map(d => d.d.slice(5)),
+      datasets: [
+        { label: 'Indexed', data: indexTrendRaw.map(d => d.i), borderColor: '#6dbf8a', backgroundColor: 'rgba(109, 191, 138, 0.1)', borderWidth: 2, tension: 0.3, pointRadius: 3, fill: false },
+        { label: 'Not indexed', data: indexTrendRaw.map(d => d.ni), borderColor: '#e57373', backgroundColor: 'rgba(229, 115, 115, 0.1)', borderWidth: 2, tension: 0.3, pointRadius: 3, fill: false }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 10, boxHeight: 10, padding: 14, font: { size: 11 } } } },
+      scales: { x: { grid: { color: chartDefaults.gridColor } }, y: { grid: { color: chartDefaults.gridColor }, beginAtZero: true } }
+    }
+  });
+
+  const buckets = { 'Top 10': 0, 'Pos 11-20': 0, 'Pos 21-30': 0, 'Pos 31-50': 0, 'Pos 51-70': 0, 'Pos 71+': 0 };
+  queriesData.forEach(q => {
+    if (q.p <= 10) buckets['Top 10']++;
+    else if (q.p <= 20) buckets['Pos 11-20']++;
+    else if (q.p <= 30) buckets['Pos 21-30']++;
+    else if (q.p <= 50) buckets['Pos 31-50']++;
+    else if (q.p <= 70) buckets['Pos 51-70']++;
+    else buckets['Pos 71+']++;
+  });
+  new Chart(document.getElementById('posDistChart'), {
+    type: 'bar',
+    data: {
+      labels: Object.keys(buckets),
+      datasets: [{
+        data: Object.values(buckets),
+        backgroundColor: ['#6dbf8a', '#a3c47e', '#f0b86e', '#e89060', '#e57373', '#7a4a4a'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.parsed.y + ' queries' } } },
+      scales: { x: { grid: { display: false } }, y: { grid: { color: chartDefaults.gridColor }, beginAtZero: true, ticks: { precision: 0 } } }
+    }
+  });
+
+  new Chart(document.getElementById('deviceChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Desktop', 'Mobile', 'Tablet'],
+      datasets: [
+        { label: 'Impressions', data: [8355, 469, 4], backgroundColor: '#7aa7d9', borderWidth: 0 },
+        { label: 'Clicks (×100)', data: [400, 0, 0], backgroundColor: '#d4a574', borderWidth: 0 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 10, padding: 12 } } },
+      scales: { x: { grid: { display: false } }, y: { grid: { color: chartDefaults.gridColor } } }
+    }
+  });
+
+  const top8 = countriesDataRaw.slice(0, 8);
+  new Chart(document.getElementById('countryChart'), {
+    type: 'doughnut',
+    data: {
+      labels: top8.map(c => c.c),
+      datasets: [{
+        data: top8.map(c => c.i),
+        backgroundColor: ['#d4a574', '#7aa7d9', '#6dbf8a', '#f0b86e', '#e57373', '#a888c4', '#5d9ec5', '#888'],
+        borderWidth: 1, borderColor: '#0e0e10'
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '55%',
+      plugins: { legend: { display: true, position: 'right', labels: { boxWidth: 10, boxHeight: 10, padding: 8, font: { size: 11 } } } }
+    }
+  });
+}
+
+function initAudienceCharts() {
+  if (chartsInit.audience) return;
+  chartsInit.audience = true;
+  const top15 = countriesDataRaw.slice(0, 15);
+  new Chart(document.getElementById('countryBarChart'), {
+    type: 'bar',
+    data: {
+      labels: top15.map(c => c.c),
+      datasets: [{ data: top15.map(c => c.i), backgroundColor: top15.map(c => c.c === 'United States' ? '#d4a574' : '#7aa7d9'), borderWidth: 0 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: { x: { grid: { color: chartDefaults.gridColor }, beginAtZero: true }, y: { grid: { display: false } } }
+    }
+  });
+  const usImp = 5550;
+  const rowImp = countriesDataRaw.slice(1).reduce((s, c) => s + c.i, 0);
+  new Chart(document.getElementById('usRowChart'), {
+    type: 'doughnut',
+    data: { labels: ['United States (target)', 'Rest of world'], datasets: [{ data: [usImp, rowImp], backgroundColor: ['#d4a574', '#888'], borderWidth: 1, borderColor: '#0e0e10' }] },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '60%', plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 10, boxHeight: 10, padding: 12 } } } }
+  });
+}
+
+function initIndexingCharts() {
+  if (chartsInit.indexing) return;
+  chartsInit.indexing = true;
+  new Chart(document.getElementById('issueChart'), {
+    type: 'bar',
+    data: {
+      labels: issuesData.map(x => x.r),
+      datasets: [{ data: issuesData.map(x => x.n), backgroundColor: issuesData.map(x => x.v === 'Failed' ? '#e57373' : x.v === 'Not Started' ? '#888' : x.v === 'Started' ? '#f0b86e' : '#6dbf8a'), borderWidth: 0 }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { grid: { color: chartDefaults.gridColor }, beginAtZero: true }, y: { grid: { display: false } } } }
+  });
+
+  const valGroup = {};
+  issuesData.forEach(x => { valGroup[x.v] = (valGroup[x.v] || 0) + x.n; });
+  new Chart(document.getElementById('validationChart'), {
+    type: 'doughnut',
+    data: { labels: Object.keys(valGroup), datasets: [{ data: Object.values(valGroup), backgroundColor: ['#6dbf8a', '#e57373', '#888', '#f0b86e'], borderWidth: 1, borderColor: '#0e0e10' }] },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '55%', plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 10, boxHeight: 10, padding: 12 } } } }
+  });
+}
+
+function renderCalendar() {
+  const cols = ['idea', 'outlined', 'drafting', 'review', 'published'];
+  cols.forEach(c => {
+    const items = state.content.filter(x => x.status === c);
+    document.getElementById('count-' + c).textContent = items.length;
+    document.getElementById('col-' + c).innerHTML = items.map(item => `
+      <div class="cal-card" onclick="editContent('${item.id}')">
+        <div class="type"><span class="cluster-tag ${item.type}">${item.type}</span></div>
+        <div class="title">${item.title}</div>
+        <div class="keyword">target: ${item.keyword || '—'}</div>
+        <div class="meta">
+          <span>${item.author || 'unassigned'}</span>
+          <span>Wk ${item.week || '?'}</span>
+        </div>
+      </div>
+    `).join('') || '<div style="color: var(--text-faint); font-size: 11px; padding: 12px 0;">empty</div>';
+  });
+  renderSchedule();
+}
+
+function renderSchedule() {
+  const byWeek = { 1: [], 2: [], 3: [], 4: [] };
+  state.content.forEach(c => { if (byWeek[c.week]) byWeek[c.week].push(c); });
+  const list = document.getElementById('scheduleList');
+  if (!list) return;
+  list.innerHTML = Object.keys(byWeek).map(w => {
+    const items = byWeek[w];
+    if (items.length === 0) return '';
+    return `<div class="checklist-section">
+      <div class="section-header open">
+        <div class="section-title"><span class="caret">▶</span>Week ${w} (${items.length} ${items.length === 1 ? 'item' : 'items'})</div>
+        <div class="section-progress"><span>${items.filter(i => i.status === 'published').length} published</span></div>
+      </div>
+      <div class="section-body open">
+        ${items.map(item => `
+          <div class="task" style="cursor: pointer;" onclick="editContent('${item.id}')">
+            <span class="cluster-tag ${item.type}">${item.type}</span>
+            <label style="cursor: pointer;">${item.title}<span class="done-by">target: ${item.target || '—'} · keyword: ${item.keyword || '—'}</span></label>
+            <span class="tag tag-status-${item.status}">${item.status}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function editContent(id) {
+  const item = id ? state.content.find(x => x.id === id) : { id: 'c' + Date.now(), type: 'rescue', title: '', keyword: '', target: '', status: 'idea', author: '', week: 1, notes: '' };
+  if (!item) return;
+  const overlay = document.getElementById('modalOverlay');
+  const modal = document.getElementById('modal');
+  modal.innerHTML = `
+    <h3>${id ? 'Edit content item' : 'Add content idea'}</h3>
+    <label>Title</label>
+    <input type="text" id="m-title" value="${escapeHtml(item.title)}">
+    <label>Type</label>
+    <select id="m-type">
+      <option value="rescue" ${item.type === 'rescue' ? 'selected' : ''}>Rescue cluster</option>
+      <option value="bestfor" ${item.type === 'bestfor' ? 'selected' : ''}>Best for X</option>
+      <option value="alt" ${item.type === 'alt' ? 'selected' : ''}>Alternatives</option>
+      <option value="industry" ${item.type === 'industry' ? 'selected' : ''}>Industry deep-dive</option>
+      <option value="commercial" ${item.type === 'commercial' ? 'selected' : ''}>Commercial page</option>
+    </select>
+    <label>Status</label>
+    <select id="m-status">
+      <option value="idea" ${item.status === 'idea' ? 'selected' : ''}>Idea</option>
+      <option value="outlined" ${item.status === 'outlined' ? 'selected' : ''}>Outlined</option>
+      <option value="drafting" ${item.status === 'drafting' ? 'selected' : ''}>Drafting</option>
+      <option value="review" ${item.status === 'review' ? 'selected' : ''}>Review</option>
+      <option value="published" ${item.status === 'published' ? 'selected' : ''}>Published</option>
+    </select>
+    <label>Target keyword</label>
+    <input type="text" id="m-keyword" value="${escapeHtml(item.keyword)}">
+    <label>Target URL / slug</label>
+    <input type="text" id="m-target" value="${escapeHtml(item.target)}">
+    <label>Author</label>
+    <input type="text" id="m-author" value="${escapeHtml(item.author)}">
+    <label>Week (1-4)</label>
+    <select id="m-week">
+      <option value="1" ${item.week == 1 ? 'selected' : ''}>Week 1</option>
+      <option value="2" ${item.week == 2 ? 'selected' : ''}>Week 2</option>
+      <option value="3" ${item.week == 3 ? 'selected' : ''}>Week 3</option>
+      <option value="4" ${item.week == 4 ? 'selected' : ''}>Week 4</option>
+    </select>
+    <label>Notes</label>
+    <textarea id="m-notes">${escapeHtml(item.notes)}</textarea>
+    <div class="modal-actions">
+      ${id ? '<button class="btn btn-danger" onclick="deleteContent(\'' + id + '\')">Delete</button>' : '<span></span>'}
+      <div style="display: flex; gap: 8px;">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveContent('${item.id}', ${id ? 'false' : 'true'})">${id ? 'Save' : 'Add'}</button>
+      </div>
+    </div>
+  `;
+  overlay.classList.add('open');
+}
+
+function escapeHtml(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+function saveContent(id, isNew) {
+  const data = {
+    id: id,
+    title: document.getElementById('m-title').value,
+    type: document.getElementById('m-type').value,
+    status: document.getElementById('m-status').value,
+    keyword: document.getElementById('m-keyword').value,
+    target: document.getElementById('m-target').value,
+    author: document.getElementById('m-author').value,
+    week: +document.getElementById('m-week').value,
+    notes: document.getElementById('m-notes').value
+  };
+  if (!data.title.trim()) { showToast('Title required', 'danger'); return; }
+  if (isNew === 'true' || isNew === true) {
+    state.content.push(data);
+  } else {
+    const idx = state.content.findIndex(x => x.id === id);
+    if (idx >= 0) state.content[idx] = data;
+  }
+  saveState();
+  closeModal();
+  renderCalendar();
+  showToast('Saved', 'success');
+}
+
+function deleteContent(id) {
+  if (!confirm('Delete this content item?')) return;
+  state.content = state.content.filter(x => x.id !== id);
+  saveState();
+  closeModal();
+  renderCalendar();
+  showToast('Deleted', 'success');
+}
+
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target.id === 'modalOverlay') closeModal(); });
+
+document.getElementById('addContent').addEventListener('click', () => editContent(null));
+
+document.getElementById('exportBtn').addEventListener('click', () => {
+  const dataStr = JSON.stringify(state, null, 2);
+  const blob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const name = (state.userName || 'team').replace(/\s+/g, '-').toLowerCase();
+  a.download = `adatasol-seo-progress-${name}-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Exported', 'success');
+});
+
+document.getElementById('importBtn').addEventListener('click', () => document.getElementById('importFile').click());
+document.getElementById('importFile').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const imported = JSON.parse(reader.result);
+      if (!confirm('This will overwrite your current progress. Continue?')) return;
+      state = Object.assign(state, imported);
+      saveState();
+      userInput.value = state.userName || '';
+      renderFixes();
+      renderPlan();
+      renderFixesSummary();
+      renderCalendar();
+      showToast('Imported', 'success');
+    } catch (err) { showToast('Invalid JSON file', 'danger'); }
+  };
+  reader.readAsText(f);
+  e.target.value = '';
+});
+
+renderFixes();
+renderPlan();
+renderFixesSummary();
+renderQueries();
+renderPages();
+renderCalendar();
+</script>
+</body>
+</html>

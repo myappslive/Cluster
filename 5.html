@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odoo Data Migration Recovery | Fix Corrupted & Lost Data | AdataSol</title>
+    <meta name="description" content="Fix corrupted, incomplete, or missing data from a failed Odoo migration. Our data recovery experts restore data integrity and accuracy.">
+    <meta name="keywords" content="odoo data migration recovery, odoo data migration failed, odoo data corruption, fix odoo data migration, odoo implementation rescue">
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "serviceType": "Odoo Data Migration Recovery",
+      "provider": { "@type": "Organization", "name": "AdataSol", "url": "https://odoo.adatasol.com" },
+      "description": "Expert recovery of corrupted, incomplete, or missing data from failed Odoo ERP migrations."
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://odoo.adatasol.com" },
+        { "@type": "ListItem", "position": 2, "name": "Odoo Implementation Rescue", "item": "https://odoo.adatasol.com/odoo-implementation-rescue" },
+        { "@type": "ListItem", "position": 3, "name": "Data Migration Recovery", "item": "https://odoo.adatasol.com/odoo-data-migration-recovery" }
+      ]
+    }
+    </script>
+
+    <style>
+        :root {
+            --primary: #714B67; --primary-light: #8E6B85; --accent: #017e84; --accent-light: #01a39e;
+            --dark: #1a1a2e; --text: #333333; --text-light: #666666; --bg-light: #f8f9fa; --white: #ffffff;
+            --border: #e0e0e0; --warning: #e74c3c; --success: #27ae60; --warning-bg: #fff5f5; --success-bg: #f0fff4;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--text); line-height: 1.7; background: var(--white); }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        .hero { background: linear-gradient(135deg, #1a1a2e 0%, #714B67 100%); color: white; padding: 80px 0 60px; }
+        .hero h1 { font-size: 2.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 20px; }
+        .hero h1 span { color: #4eeadb; }
+        .hero p { font-size: 1.15rem; opacity: 0.9; margin-bottom: 25px; max-width: 700px; }
+        .btn-primary { background: #4eeadb; color: #1a1a2e; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 700; transition: all 0.3s; display: inline-block; }
+        .btn-primary:hover { background: #3dd4c6; transform: translateY(-2px); }
+        .breadcrumb { font-size: 0.85rem; opacity: 0.7; margin-bottom: 20px; }
+        .breadcrumb a { color: white; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .content { padding: 60px 0; }
+        .content h2 { font-size: 1.8rem; font-weight: 800; color: var(--dark); margin: 50px 0 15px; border-bottom: 2px solid var(--bg-light); padding-bottom: 10px; }
+        .content h3 { font-size: 1.3rem; color: var(--primary); margin: 35px 0 10px; }
+        .content p { margin-bottom: 15px; color: var(--text-light); font-size: 1.05rem; }
+        .content ul, .content ol { margin: 15px 0 15px 30px; color: var(--text-light); }
+        .content li { margin-bottom: 10px; font-size: 1.02rem; }
+        
+        /* Process Steps */
+        .process-steps { counter-reset: step; margin: 30px 0; }
+        .step-item { display: flex; gap: 20px; margin-bottom: 30px; }
+        .step-num { flex-shrink: 0; width: 50px; height: 50px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; }
+        .step-content h3 { margin-top: 0; color: var(--dark); }
+        .step-content p { margin-bottom: 0; }
+
+        .inline-cta { background: rgba(1,126,132,0.05); border-left: 4px solid var(--accent); padding: 25px; margin: 40px 0; border-radius: 0 8px 8px 0; }
+        .inline-cta p { margin-bottom: 10px; color: var(--dark); font-weight: 600; }
+        .inline-cta a { color: var(--accent); font-weight: 700; }
+
+        .alert-box { background: var(--warning-bg); border: 1px solid rgba(231,76,60,0.2); padding: 25px; border-radius: 8px; margin: 30px 0; }
+        .alert-box h3 { color: var(--warning); margin-top: 0; }
+
+        .bottom-cta { background: linear-gradient(135deg, #1a1a2e, #714B67); color: white; padding: 60px 0; text-align: center; margin-top: 60px; }
+        .bottom-cta h2 { font-size: 2rem; font-weight: 800; margin-bottom: 15px; color: white; border: none; padding: 0; }
+        .bottom-cta p { opacity: 0.9; margin-bottom: 25px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        @media (max-width: 768px) { .hero h1 { font-size: 1.8rem; } .step-item { flex-direction: column; } }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <div class="container">
+            <div class="breadcrumb"><a href="https://odoo.adatasol.com">Home</a> > <a href="/odoo-implementation-rescue">Odoo Implementation Rescue</a> > Data Migration Recovery</div>
+            <h1>Odoo Data Migration Recovery: <span>Fix Corrupted & Lost Data</span></h1>
+            <p>Data is the lifeblood of your ERP. If the data inside your Odoo system is wrong, duplicated, or missing, your entire business operates on faulty information. Here’s how we recover it.</p>
+            <a href="/odoo-implementation-rescue#contact" class="btn-primary">Get a Data Integrity Audit</a>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container">
+            <p>The single fastest way to kill user adoption of a new ERP system is to go live with bad data. If your team logs into Odoo and sees duplicate customer records, missing inventory counts, or financial statements that don't reconcile, they will immediately lose trust in the system and revert to their spreadsheets.</p>
+
+            <p>Failed data migration is one of the most common reasons companies seek an <a href="/odoo-implementation-rescue">Odoo implementation rescue</a>. Poor data migration is a core <a href="/common-odoo-implementation-mistakes">implementation mistake</a> that creates a cascading failure across every department. Fortunately, botched data migrations can be fixed without starting your entire Odoo project over.</p>
+
+            <h2>Common Data Migration Issues We See</h2>
+            <p>Data migration isn't just about moving numbers from Column A to Column B. It requires understanding relational databases, foreign keys, and Odoo's specific data architecture. When inexperienced partners handle migration, we typically see these critical errors:</p>
+
+            <ul>
+                <li><strong>Missing Records:</strong> Customers, vendors, or products that existed in your legacy system but vanished in Odoo because of failed import scripts or row limits.</li>
+                <li><strong>Duplicated Data:</strong> The same customer appearing 3, 4, or 5 times because of different import runs, varying name formats (e.g., "Acme Corp" vs "Acme Corporation"), or mapping errors.</li>
+                <li><strong>Broken Relational Links:</strong> A sales order that doesn't link to the correct customer, or an invoice that isn't attached to the originating sales order, because IDs were mismatched during migration.</li>
+                <li><strong>Inaccurate Financial History:</strong> Opening balances, journal entries, or tax histories that don't reconcile with your actual bank statements or legacy GL.</li>
+                <li><strong>Orphaned Records:</strong> Records that exist in the Odoo database but have no association with any menu or view, making them invisible to users and consuming database space.</li>
+            </ul>
+
+            <div class="alert-box">
+                <h3>⚠️ The Danger of "Working Around" Bad Data</h3>
+                <p>Many companies try to survive bad data by having employees manually fix records one by one. Not only is this an incredible waste of labor (contributing heavily to the <a href="/cost-of-failed-odoo-implementation">hidden cost of failure</a>), but manual entry introduces human error, making the data even less reliable.</p>
+            </div>
+
+            <h2>Our 5-Step Odoo Data Recovery Process</h2>
+            <p>Fixing corrupted data requires surgical precision. You cannot simply re-import CSV files over a broken database without risking further duplication and corruption. Our <a href="/odoo-implementation-rescue">Odoo implementation rescue</a> team uses a structured, safe methodology to restore your data integrity.</p>
+
+            <div class="process-steps">
+                <div class="step-item">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h3>Source Audit & Comparison</h3>
+                        <p>We don't just look at Odoo; we go back to the original legacy data source (your old ERP, SQL database, or spreadsheets). We compare the source against what currently lives in your Odoo database to identify exactly what is missing, duplicated, or mapped incorrectly.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h3>Data Cleansing & Deduplication</h3>
+                        <p>Before re-importing anything, we clean the source data. We use automated scripts to remove duplicates, standardize naming conventions (e.g., ensuring all country codes match Odoo's base format), and validate relational integrity. Clean data going in means clean data coming out.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <h3>Safe Re-Migration & Repair</h3>
+                        <p>Using specialized scripts and direct database methods (not just manual CSV imports), we migrate the missing/corrupted data safely. We use Odoo's external API and precise SQL commands to update existing records or insert missing ones without overwriting the valid workflows and customizations you've already built.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">4</div>
+                    <div class="step-content">
+                        <h3>Financial Reconciliation</h3>
+                        <p>For accounting data, simple record counts aren't enough. We reconcile your Odoo accounting data against external sources—bank statements, legacy GL trial balances, and tax filings—to ensure every penny is accounted for and that your closing balances match your opening balances.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">5</div>
+                    <div class="step-content">
+                        <h3>Validation & Sign-off</h3>
+                        <p>We provide detailed reports showing record counts, financial matches, and relational integrity checks. Your department heads review and officially sign off that the data is accurate and complete. Only then is the recovery considered successful.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="inline-cta">
+                <p>💾 Can you fix data without wiping the database? Yes. Our <a href="/odoo-implementation-rescue">Odoo implementation rescue</a> process uses targeted commands to fix specific tables without touching your working configurations. <a href="/odoo-implementation-rescue#contact">Talk to our data recovery team →</a></p>
+            </div>
+
+            <h2>Why Standard CSV Imports Fail</h2>
+            <p>Odoo provides built-in CSV import tools, so why do migrations still fail? Because standard CSV imports lack the intelligence to handle complex relational data.</p>
+            <p>For example, if you import a Sales Order, Odoo needs to know the exact internal database ID (or exact external ID) of the Customer, the Product, the Taxes, and the Pricelist. If the CSV has a typo in the customer name, Odoo will either reject the import or create a duplicate customer record. When you have thousands of records with complex relationships, manual CSV imports are a ticking time bomb. Proper migration requires scripting via Odoo's XML-RPC/JSON-RPC API to map relationships perfectly.</p>
+
+            <h2>Fixing the Data vs. Fixing the System</h2>
+            <p>Data migration recovery is often the critical first phase of a full <a href="/odoo-implementation-rescue">Odoo implementation rescue</a>. Think of it this way: you can't test if a workflow is working properly if the data running through it is corrupted.</p>
+            <p>Once we restore data integrity, your team can finally see accurate reports. Trust is rebuilt, and suddenly, fixing the broken workflows and customizations becomes infinitely easier because you are working with reliable information.</p>
+
+            <p>If your team is constantly questioning the numbers in Odoo, you have a data integrity emergency. The longer you wait to fix it, the more "bad data" compounds as users continue to input information on top of a broken foundation.</p>
+
+        </div>
+    </section>
+
+    <section class="bottom-cta">
+        <div class="container">
+            <h2>Don't Operate on Bad Data</h2>
+            <p>Fix corrupted, missing, and duplicated data in your Odoo system. Get a professional data integrity audit and recovery roadmap.</p>
+            <a href="/odoo-implementation-rescue#contact" class="btn-primary">Request a Data Audit →</a>
+        </div>
+    </section>
+
+</body>
+</html>
